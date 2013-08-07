@@ -1,5 +1,6 @@
 
 include <Includes/FreeSerif.scad>
+include <bolts.scad>
 
 module box(w,h,d) {
 	scale ([w,h,d]) cube(1, true);
@@ -178,6 +179,75 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 	//									[-height-0.1,0] ] );
 	}
 }
+
+
+module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false ) {
+	rotate([0,0,-linear_bearing_rotate]) translate([0,0,-0.1]) difference() {
+		union() {
+			hull() {
+				cylinder( r = lb_diameter/2 + thickness, h = lb_thickness, center= true, $fn = 100 );
+				translate([lb_diameter/2+thickness,-(gap/2+thickness),-lb_thickness/2]) scale([holder_clasp,gap+thickness*2, lb_thickness]) cube( 1 );
+
+
+			}
+			translate([lb_diameter/2+thickness/2,gap/2+thickness,0]) rotate([-90,0,0]) hull() {
+				cylinder( r = m3_diameter*1.5, h = thickness );
+				translate([clasp/2,0,0]) {
+					scale([m3_diameter*3.3,m3_diameter*6.5,0.1]) cube(1,center=true);
+					cylinder( r = m3_diameter*1.5, h = thickness );
+				}
+			}
+			translate([lb_diameter/2+thickness/2,-gap/2-thickness,0]) rotate([90,0,0]) hull() {
+				cylinder( r = m3_diameter*1.5, h = thickness );
+				translate([clasp/2,0,0]) {
+					scale([m3_diameter*3.3,m3_diameter*6.5,0.1]) cube(1,center=true);
+					cylinder( r = m3_diameter*1.5, h = thickness );
+				}
+			}
+			if( support == true ) {
+				rotate([0,0,linear_bearing_rotate]){
+		/*	translate([6,lb_thickness/2-lb_diameter/2-2,-lb_thickness/2]) rotate([0,-90,0])
+				linear_extrude(height = thickness) 
+					polygon([	[-0.1,lb_thickness],
+									[-0.1,lb_thickness-thickness*2],
+									[lb_thickness-thickness*2,-0.1],
+									[lb_thickness,-lb_thickness/4],
+									[lb_thickness,lb_thickness/2-thickness*2]]);
+
+			translate([-6-belt_thickness,lb_thickness/2-lb_diameter/2-2,-lb_thickness/2]) rotate([0,-90,0])
+				linear_extrude(height = thickness) 
+					polygon([	[-0.1,lb_thickness],
+									[-0.1,lb_thickness-thickness*2],
+									[lb_thickness-thickness*2,-0.1],
+									[lb_thickness,-lb_thickness/4],
+									[lb_thickness,lb_thickness/2-thickness*2]]);*/
+					translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) rotate([90,0,180])
+						linear_extrude(height = thickness*2) 
+							polygon([	[lb_thickness/2,lb_thickness],
+											[0,lb_thickness],
+											[0,0],
+											[lb_thickness,0],
+											[lb_thickness,thickness*3]]);
+				}
+			}// if support
+		} //union
+
+		cylinder( r = lb_diameter/2, h = lb_thickness+0.1, center= true, $fn = 100 );
+
+		translate([0,-gap/2,-lb_thickness/2-1]) scale([lb_diameter*2,gap, lb_thickness+2]) cube( 1 );
+
+		
+		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+thickness,0]) rotate([90,0,0])
+			cylinder( r = m3_diameter/2, h = lb_diameter+2*thickness, $fn = 100 );
+
+		translate([(lb_diameter+thickness+clasp)/2,-lb_diameter/2+thickness-2,0]) rotate([90,0,0])
+			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 100 );
+
+		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+2,0]) rotate([90,90,0])
+			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
+	}//difference
+}
+
 
 
 

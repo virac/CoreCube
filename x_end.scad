@@ -18,14 +18,7 @@ rod_separation = 35;
 rod_thickness = 5;
 rod_grip = 30;
 
-m3_diameter = 3.2;
-m3_nut_diameter = 6.4;
-
-m5_diameter = 5.2;
-m5_nut_diameter = 9.4;
-
 linear_bearing_center = -2.5; //the linear bearing is centered this amount from the end of the s_rod
-
 
 //7.5
 dist_from_rod_y = 36.5;
@@ -68,7 +61,7 @@ module x_end( lb_diameter, lb_inner_diameter, lb_thickness,
 
 		translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
 			linear_bearing_holder( lb_diameter, lb_thickness, 
-												gap, h_thickness,clasp );
+												gap, h_thickness,clasp, true );
 	}
 }
 
@@ -133,72 +126,6 @@ module x_end_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, th
 
 
 
-
-module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp ) {
-	rotate([0,0,-linear_bearing_rotate]) translate([0,0,-0.1]) difference() {
-		union() {
-			hull() {
-				cylinder( r = lb_diameter/2 + thickness, h = lb_thickness, center= true, $fn = 100 );
-				translate([lb_diameter/2+thickness,-(gap/2+thickness),-lb_thickness/2]) scale([holder_clasp,gap+thickness*2, lb_thickness]) cube( 1 );
-
-
-			}
-			translate([lb_diameter/2+thickness/2,gap/2+thickness,0]) rotate([-90,0,0]) hull() {
-				cylinder( r = m3_diameter*1.5, h = thickness );
-				translate([clasp/2,0,0]) {
-					scale([m3_diameter*3.3,m3_diameter*6.5,0.1]) cube(1,center=true);
-					cylinder( r = m3_diameter*1.5, h = thickness );
-				}
-			}
-			translate([lb_diameter/2+thickness/2,-gap/2-thickness,0]) rotate([90,0,0]) hull() {
-				cylinder( r = m3_diameter*1.5, h = thickness );
-				translate([clasp/2,0,0]) {
-					scale([m3_diameter*3.3,m3_diameter*6.5,0.1]) cube(1,center=true);
-					cylinder( r = m3_diameter*1.5, h = thickness );
-				}
-			}
-
-		rotate([0,0,linear_bearing_rotate]){
-		/*	translate([6,lb_thickness/2-lb_diameter/2-2,-lb_thickness/2]) rotate([0,-90,0])
-				linear_extrude(height = thickness) 
-					polygon([	[-0.1,lb_thickness],
-									[-0.1,lb_thickness-thickness*2],
-									[lb_thickness-thickness*2,-0.1],
-									[lb_thickness,-lb_thickness/4],
-									[lb_thickness,lb_thickness/2-thickness*2]]);
-
-			translate([-6-belt_thickness,lb_thickness/2-lb_diameter/2-2,-lb_thickness/2]) rotate([0,-90,0])
-				linear_extrude(height = thickness) 
-					polygon([	[-0.1,lb_thickness],
-									[-0.1,lb_thickness-thickness*2],
-									[lb_thickness-thickness*2,-0.1],
-									[lb_thickness,-lb_thickness/4],
-									[lb_thickness,lb_thickness/2-thickness*2]]);*/
-			translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) rotate([90,0,180])
-				linear_extrude(height = thickness*2) 
-					polygon([	[lb_thickness/2,lb_thickness],
-									[0,lb_thickness],
-									[0,0],
-									[lb_thickness,0],
-									[lb_thickness,thickness*3]]);
-}
-		} //union
-
-		cylinder( r = lb_diameter/2, h = lb_thickness+0.1, center= true, $fn = 100 );
-
-		translate([0,-gap/2,-lb_thickness/2-1]) scale([lb_diameter*2,gap, lb_thickness+2]) cube( 1 );
-
-		
-		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+thickness,0]) rotate([90,0,0])
-			cylinder( r = m3_diameter/2, h = lb_diameter+2*thickness, $fn = 100 );
-
-		translate([(lb_diameter+thickness+clasp)/2,-lb_diameter/2+thickness-2,0]) rotate([90,0,0])
-			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 100 );
-
-		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+2,0]) rotate([90,90,0])
-			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
-	}//difference
-}
 
 
 
