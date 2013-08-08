@@ -30,7 +30,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 	for( i = [0:3] ) {
 		translate([lb_steps[i][0]*(lb_thickness+lb_separation)/2,
 					  lb_steps[i][1]*r_separation/2,
-					  lb_diameter/2]) 
+					  lb_diameter/2+0.1]) 
 			rotate([0,-90,lb_steps[i][2]]) 
 				linear_bearing_holder( lb_diameter, lb_thickness, 
 												gap, h_thickness,clasp, false );
