@@ -1,7 +1,7 @@
 include <utils.scad>
 
-smaller_dia = 12;
-larger_dia = 16;
+smaller_dia = 12.1;
+larger_dia = 16.1;
 jhead_body_dia = [larger_dia,smaller_dia,larger_dia,smaller_dia];
 jhead_body_height = [5,9.4,11.6,27];
 base_mount_width = 50;
@@ -12,7 +12,7 @@ jhead_mount_height = 18;
 jhead_mount_thickness = 16;
 jhead_mount_vertical_offset = -5;
 slot_style = false;
-filament_size = 8;
+filament_size = 16;//m5_tap_dia;
 hole_offset = 5;
 added_cap_width = 3;
 
@@ -51,10 +51,10 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 						translate([0,0,b_thickness+e_thickness]) mirror([0,0,1]) {
 							hole(	-(e_width/4+(body_dia[0]+c_width)/4),
 									-(body_height[0]+body_height[1])/2-b_thickness,
-										m3_diameter/2,e_thickness );
+										m3_diameter/2,e_thickness-m3_nut_thickness-0.1 );
 							hole(	 (e_width/4+(body_dia[0]+c_width)/4),
 									-(body_height[0]+body_height[1])/2-b_thickness,
-										m3_diameter/2,e_thickness );
+										m3_diameter/2,e_thickness-m3_nut_thickness-0.1 );
 						}
 						//nut traps
 						translate([	-(e_width/4+(body_dia[0]+c_width)/4),
@@ -85,14 +85,14 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 				difference() {
 					union() {
 						translate([0,e_vert_offset,1.5*b_thickness+e_thickness])
-							scale([e_width,e_height,b_thickness])
+							scale([e_width*1.05,e_height,b_thickness])
 								cube(1,center=true);
 						intersection() {
 							translate([0,e_vert_offset,b_thickness+e_thickness/2])
 								scale([e_width,e_height,e_thickness])
 									cube(1,center=true);
 							intersection() {
-							translate([0,e_vert_offset+e_height/2+.1,b_thickness+body_dia[0]/2])
+							translate([0,e_vert_offset+e_height/2+0.1,b_thickness+body_dia[0]/2-0.1])
 								rotate([90,0,0])
 									difference() {
 										union() {
