@@ -6,6 +6,10 @@ module box(w,h,d) {
 	scale ([w,h,d]) cube(1, true);
 }
 
+module hexagon(x,y,height, depth) {
+	translate([x,y,0]) hexagon(height, depth);
+}
+
 module hexagon(height, depth) {
 	boxWidth=height/1.75;
 		union(){
@@ -15,12 +19,11 @@ module hexagon(height, depth) {
 		}
 }
 
-module hole(x,y,rad,deep) {
-	translate([x,y,-0.1]) cylinder(r=rad,h=deep,$fn=100);
+module hole(x,y,rad,deep,fn=100) {
+	translate([x,y,-0.1]) cylinder(r=rad,h=deep,$fn=fn);
 }
-
-module through_hole(x,y,rad,deep) {
-	translate([x,y,-deep/2-0.1]) cylinder(r=rad,h=deep,$fn=100);
+module through_hole(x,y,rad,deep,fn=100) {
+	translate([x,y,-deep/2-0.1]) cylinder(r=rad,h=deep,$fn=fn);
 }
 
 module braced_L_bracket(width, length, thickness) {
