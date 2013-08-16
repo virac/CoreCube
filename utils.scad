@@ -184,8 +184,8 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 }
 
 
-module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false ) {
-	rotate([0,0,-linear_bearing_rotate]) translate([0,0,-0.1]) difference() {
+module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false, lb_rotate = 0 ) {
+	rotate([0,0,-lb_rotate]) translate([0,0,-0.1]) difference() {
 		union() {
 			hull() {
 				cylinder( r = lb_diameter/2 + thickness, h = lb_thickness, center= true, $fn = 100 );
