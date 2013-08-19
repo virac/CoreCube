@@ -209,22 +209,7 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 			}
 			if( support == true ) {
 				rotate([0,0,linear_bearing_rotate]){
-		/*	translate([6,lb_thickness/2-lb_diameter/2-2,-lb_thickness/2]) rotate([0,-90,0])
-				linear_extrude(height = thickness) 
-					polygon([	[-0.1,lb_thickness],
-									[-0.1,lb_thickness-thickness*2],
-									[lb_thickness-thickness*2,-0.1],
-									[lb_thickness,-lb_thickness/4],
-									[lb_thickness,lb_thickness/2-thickness*2]]);
-
-			translate([-6-belt_thickness,lb_thickness/2-lb_diameter/2-2,-lb_thickness/2]) rotate([0,-90,0])
-				linear_extrude(height = thickness) 
-					polygon([	[-0.1,lb_thickness],
-									[-0.1,lb_thickness-thickness*2],
-									[lb_thickness-thickness*2,-0.1],
-									[lb_thickness,-lb_thickness/4],
-									[lb_thickness,lb_thickness/2-thickness*2]]);*/
-					translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) rotate([90,0,180])
+					translate([0,lb_thickness/2-lb_diameter+thickness/1.5,-lb_thickness/2]) rotate([90,0,180])
 						linear_extrude(height = thickness*2) 
 							polygon([	[lb_thickness/2,lb_thickness],
 											[0,lb_thickness],
@@ -248,6 +233,13 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 
 		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+2,0]) rotate([90,90,0])
 			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
+
+		
+		#rotate([0,0,linear_bearing_rotate])
+//			translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) 
+			translate([-lb_diameter/2-lb_thickness/2,0,-thickness*3]) 
+				rotate([90,0,180])
+					cylinder( r = m3_diameter/2, h = 3*thickness, center= true, $fn = 100 );
 	}//difference
 }
 

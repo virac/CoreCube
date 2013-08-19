@@ -65,9 +65,16 @@ module x_end( lb_diameter, lb_inner_diameter, lb_thickness,
 			} // union
 			translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-4]) 
 				cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
-		} // difference
 
-	//	translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
+
+			translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
+				linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
+											holder_gap, holder_thickness,holder_clasp, true );
+		} // difference
+//
+//		translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
+//		linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
+//											holder_gap, holder_thickness,holder_clasp, true );
 	}
 }
 
