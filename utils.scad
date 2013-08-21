@@ -214,8 +214,8 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 							polygon([	[lb_thickness/2,lb_thickness],
 											[0,lb_thickness],
 											[0,0],
-											[lb_thickness,0],
-											[lb_thickness,thickness*3]]);
+											[lb_thickness+1,0],
+											[lb_thickness+1,thickness*4]]);
 				}
 			}// if support
 		} //union
@@ -235,9 +235,9 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
 
 		
-		#rotate([0,0,linear_bearing_rotate])
+	#	rotate([0,0,linear_bearing_rotate])
 //			translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) 
-			translate([-lb_diameter/2-lb_thickness/2,0,-thickness*3]) 
+			translate([-lb_diameter/2-lb_thickness/2-1,0,-thickness*3]) 
 				rotate([90,0,180])
 					cylinder( r = m3_diameter/2, h = 3*thickness, center= true, $fn = 100 );
 	}//difference
