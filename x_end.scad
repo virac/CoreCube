@@ -1,4 +1,5 @@
-include <utils.scad>
+use <utils.scad>
+include <bolts.scad>
 
 bearing_diameter = 14;
 bearing_inner_diameter = 5.2;
@@ -81,7 +82,7 @@ module x_end( lb_diameter, lb_inner_diameter, lb_thickness,
 module x_end_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, thickness, gap, h_thickness,clasp, bolt_rez ) {
 	translate([thickness/2,0,0]) difference() {
 		union() {
-			translate([-dist_from_rod_x/4,lb_diameter/4,0]) scale([grip+abs(dist_from_rod_x/2), lb_diameter + separation + r_diameter + thickness*2,r_diameter/2+thickness]) 
+			translate([-dist_from_rod_x/4,lb_diameter/4+h_thickness/2,0]) scale([grip+abs(dist_from_rod_x/2), lb_diameter + separation + r_diameter + thickness*2 - h_thickness,r_diameter/2+thickness]) 
 				cube(1,center = true);
 			//translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+ separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) hull() {
 			//	cylinder( r = lb_diameter/2 + h_thickness, h = r_diameter/2+ thickness, center= true, $fn = 100 );
@@ -98,15 +99,21 @@ module x_end_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, th
 		}
 
 		//bearing holder cutout
-		translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) union() {
+		/*translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) union() {
 				translate([0,0,-r_diameter/4]) cylinder( r = lb_diameter/2, h = r_diameter/2+0.1, center= true, $fn = 100 );
 				translate([0,0,r_diameter/4]) cylinder( r = lb_diameter/2, h = thickness+0.1, center= true, $fn = 100 );
 				translate([lb_diameter/2-10,-gap/2,-lb_thickness/2-1]) scale([lb_diameter+10,gap, lb_thickness+2]) cube( 1 );
+		}*/
+		//Linear Bearing Mount Holes
+		
+		translate([-10.2,-19,0.5]) rotate([90,0,0]) {
+#			cylinder( r = m3_diameter/2, h = thickness*3, $fn = 100 );
+			//translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
 		}
 
 
 		//bolt holes
-		translate([-4,-25,-thickness-0.1]) {
+		translate([-6,-24,-thickness-0.1]) {
 			cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
 			translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
 		}
@@ -123,7 +130,7 @@ module x_end_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, th
 			}
 		}
 		//bottom bolts
-		translate([0,34.5,-thickness-0.1]) {
+		translate([0,33.5,-thickness-0.1]) {
 			translate([11,0,0]) {
 				cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
 				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
