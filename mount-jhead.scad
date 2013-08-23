@@ -96,10 +96,10 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 						cylinder( r = m3_diameter,h = 1);
 				}
 
-				translate([0,-b_height/2+brace_height/2,0]) for( i = [0:3] ) {
+				/*translate([0,-b_height/2+brace_height/2,0]) for( i = [0:3] ) {
 					translate([	brace_holes[i][0], brace_holes[i][1],b_thickness])
 						cylinder( r = m3_diameter,h = 1);
-				}
+				}*/
 			}//union add section
 			union() {//removal section
 				translate([0,e_vert_offset+e_height/2+.1,b_thickness+max(body_size,f_size+2)/2]) rotate([90,0,0]) {

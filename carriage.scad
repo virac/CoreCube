@@ -37,6 +37,12 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						[ (b_width/2-h_offset),-(b_height/2-h_offset)],
 						[-(b_width/2-h_offset), (b_height/2-h_offset)],
 						[-(b_width/2-h_offset),-(b_height/2-h_offset)]];
+	brace_width = lb_thickness*2+lb_separation;
+	brace_height= lb_diameter+r_separation+28;
+	brace_holes = [[ (brace_width/2-h_offset), (brace_height/2-h_offset)],
+						[ (brace_width/2-h_offset),-(brace_height/2-h_offset)],
+						[-(brace_width/2-h_offset), (brace_height/2-h_offset)],
+						[-(brace_width/2-h_offset),-(brace_height/2-h_offset)]];
 	difference() {
 		union() {
 			for( i = [0:3] ) {
@@ -51,9 +57,14 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 			for( i = [0:3] ) {
 				translate([mount_holes[i][0],mount_holes[i][1]-(b_height/2-h_offset),h_thickness/2]) {
 					cylinder( r = m3_diameter*1.5,h = 2);
-					translate([sign(mount_holes[i][0]) * belt_offset,0,0])
-						cylinder( r = m3_diameter*1.5,h = 2);
+				//	translate([sign(mount_holes[i][0]) * belt_offset,0,0])
+				//		cylinder( r = m3_diameter*1.5,h = 2);
 				}
+			}
+		//	translate([0,-b_height/2-brace_height/2,h_thickness/2]) 
+for( i = [0:3] ) {
+				translate([	brace_holes[i][0], brace_holes[i][1],b_thickness])
+			#		cylinder( r = m3_diameter*1.5,h = 2);
 			}
 		}//union
 		//drill holes to mount the hot end mount and belt clamps
