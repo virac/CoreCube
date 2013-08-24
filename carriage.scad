@@ -53,27 +53,27 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						linear_bearing_holder( lb_diameter, lb_thickness, 
 												gap, h_thickness,clasp, false );
 			}
-			translate([0,0,0]) scale([lb_thickness*2+lb_separation,lb_diameter+r_separation+28,h_thickness]) cube(1,center=true);
-			for( i = [0:3] ) {
-				translate([mount_holes[i][0],mount_holes[i][1]-(b_height/2-h_offset),h_thickness/2]) {
+			cube([brace_width,brace_height,h_thickness],center=true);
+			translate([0,b_height/2-brace_height/2,0]) for( i = [0:3] ) {
+				translate([mount_holes[i][0],mount_holes[i][1],h_thickness/2]) {
 					cylinder( r = m3_diameter*1.5,h = 2);
-				//	translate([sign(mount_holes[i][0]) * belt_offset,0,0])
-				//		cylinder( r = m3_diameter*1.5,h = 2);
 				}
 			}
-		//	translate([0,-b_height/2-brace_height/2,h_thickness/2]) 
-for( i = [0:3] ) {
-				translate([	brace_holes[i][0], brace_holes[i][1],b_thickness])
-			#		cylinder( r = m3_diameter*1.5,h = 2);
+
+			for( i = [0:3] ) {
+				translate([	brace_holes[i][0], brace_holes[i][1],h_thickness/2])
+					cylinder( r = m3_diameter*1.5,h = 2);
 			}
 		}//union
 		//drill holes to mount the hot end mount and belt clamps
-		translate([0,-(b_height/2-h_offset),h_thickness/2])
-			for( i = [0:3] ) {
-				through_hole( mount_holes[i][0], mount_holes[i][1],m3_diameter/2,100);
-				through_hole( mount_holes[i][0] + sign(mount_holes[i][0]) * belt_offset, mount_holes[i][1],m3_diameter/2,100);
-				hole(mount_holes[i][0], mount_holes[i][1], m3_nut_diameter/2, 3,6);
-				hole(mount_holes[i][0] + sign(mount_holes[i][0]) * belt_offset, mount_holes[i][1], m3_nut_diameter/2, 3,6);
-			}
+		translate([0,b_height/2-brace_height/2,h_thickness/2]) for( i = [0:3] ) {
+			through_hole( mount_holes[i][0], mount_holes[i][1],m3_diameter/2,100);
+			hole(mount_holes[i][0], mount_holes[i][1], m3_nut_diameter/2, 3,6);
+		}
+			
+		translate([0,0,h_thickness/2]) for( i = [0:3] ) {
+			through_hole( brace_holes[i][0], brace_holes[i][1],m3_diameter/2,100);
+			hole(	brace_holes[i][0], brace_holes[i][1], m3_nut_diameter/2, 3,6);
+		}
 	}//difference
 }

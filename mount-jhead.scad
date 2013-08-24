@@ -68,45 +68,42 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 						[ (brace_width/2-h_offset),-(brace_height/2-h_offset)],
 						[-(brace_width/2-h_offset), (brace_height/2-h_offset)],
 						[-(brace_width/2-h_offset),-(brace_height/2-h_offset)]];
+	box_thickness = max(e_thickness,f_size+2);
 	union() {
 		difference() {
 			union() { //add section
 				translate([0,0,b_thickness/2])
-					scale([b_width,b_height,b_thickness])
-						cube(1,center=true);
+					cube([b_width,b_height,b_thickness],center=true);
 
 
 				translate([	-(b_width/2+(brace_width-b_width)/4),
 								-b_height/2+brace_height/2,
 								 b_thickness/2])
-					scale([(brace_width-b_width)/2,brace_height,b_thickness])
-						cube(1,center=true);
+					cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
 				translate([	(b_width/2+(brace_width-b_width)/4),
 								-b_height/2+brace_height/2,
 								 b_thickness/2])
-					scale([(brace_width-b_width)/2,brace_height,b_thickness])
-						cube(1,center=true);
+					cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
 
-//lb_thickness*2+lb_separation,lb_diameter+r_separation+28
-				translate([0,e_vert_offset,b_thickness+max(e_thickness,f_size+2)/2])
-					scale([e_width,e_height,max(e_thickness,f_size+2)])
-						cube(1,center=true);
+				translate([0,e_vert_offset,b_thickness+box_thickness/2])
+					scale()
+						cube([e_width,e_height,box_thickness],center=true);
 				for( i = [0:3] ) {
 					translate([mount_holes[i][0],mount_holes[i][1],b_thickness])
-						cylinder( r = m3_diameter,h = 1);
+						cylinder( r = m3_diameter*1.5,h = 1);
 				}
 
-				/*translate([0,-b_height/2+brace_height/2,0]) for( i = [0:3] ) {
+		/*		translate([0,-b_height/2+brace_height/2,0]) for( i = [0:3] ) {
 					translate([	brace_holes[i][0], brace_holes[i][1],b_thickness])
-						cylinder( r = m3_diameter,h = 1);
+						cylinder( r = m3_diameter*1.5,h = 1);
 				}*/
 			}//union add section
 			union() {//removal section
-				translate([0,e_vert_offset+e_height/2+.1,b_thickness+max(body_size,f_size+2)/2]) rotate([90,0,0]) {
+				translate([0,e_vert_offset+e_height/2+.1,b_thickness+box_thickness/2]) rotate([90,0,0]) {
 					jhead_hull(body_dia, body_height, f_size, b_thickness, [0,8,0] );
 					if( slot_style == false ) {
 						translate( [-body_dia[0]/2-c_width/2,0,4] )
-							scale([body_size+c_width,body_size,body_height[3]]) cube(1);
+							cube([body_size+c_width,body_size,body_height[3]]);
 					}
 				}
 				if( slot_style == false ) translate( [0,e_vert_offset+e_height/2,0]) { 
@@ -144,33 +141,31 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 			}// union removal section
 		}//difference
 		if( s_style == false ) {
-			translate([0,b_width,2*b_thickness+e_thickness]) rotate([0,180,0])
+			translate([0,b_width,2*b_thickness+box_thickness]) rotate([0,180,0])
 			{
 				difference() {
 					union() {
-						translate([0,e_vert_offset,1.5*b_thickness+max(e_thickness,f_size+2)])
-							scale([e_width*1.05,e_height,b_thickness])
-								cube(1,center=true);
+						translate([0,e_vert_offset,1.5*b_thickness+box_thickness])
+							cube([e_width*1.05,e_height,b_thickness],center=true);
 						intersection() {
-							translate([0,e_vert_offset,b_thickness+max(e_thickness,f_size+2)/2])
-								scale([e_width,e_height,max(e_thickness,f_size+2)])
-									cube(1,center=true);
+							translate([0,e_vert_offset,b_thickness+box_thickness/2])
+								cube([e_width,e_height,box_thickness],center=true);
 							intersection() {
-							translate([0,e_vert_offset+e_height/2+0.1,b_thickness+max(body_size,f_size+2)/2-0.1])
+							translate([0,e_vert_offset+e_height/2+0.1,b_thickness+box_thickness/2-0.1])
 								rotate([90,0,0])
 									difference() {
 										union() {
 											jhead_hull(body_dia, body_height, f_size, b_thickness, [0,0,0] );
 											translate( [-body_dia[0]/2-c_width/2,0,4] )
-												scale([body_dia[0]+c_width,body_dia[0],body_height[3]]) cube(1);
+												cube([body_dia[0]+c_width,body_dia[0],body_height[3]]);
 										} //union
 										jhead_hull(body_dia, body_height, f_size, b_thickness );
 									}//difference
 			
-							translate([0,e_vert_offset+e_height/2+0.1,b_thickness+max(body_size,f_size+2)/2-0.1])
+							translate([0,e_vert_offset+e_height/2+0.1,b_thickness+box_thickness/2-0.1])
 								rotate([90,0,0])
 									translate( [-body_dia[0]/2-c_width/2,0,4] )
-									scale([body_dia[0]+c_width,body_dia[0],body_height[3]]) cube(1);
+									cube([body_dia[0]+c_width,body_dia[0],body_height[3]]);
 							}//intersection
 						}//intersection
 					}//union
