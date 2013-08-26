@@ -29,7 +29,8 @@ filament_size = 17.5;//m5_tap_dia;
 hole_offset = 5;
 added_cap_width = 3;
 
-grip_width = 15;
+grip_offset = 0;
+grip_width = 10;
 grip_height = m5_nut_diameter + 8; //6.4+8=14.8
 grip_thickness = 8;
 grip_extra = 10;
@@ -47,7 +48,7 @@ if( extruder == 1 ) {
 			linear_bearing_diameter, linear_bearing_inner_diameter, 
 			linear_bearing_thickness, linear_bearing_separation, rod_separation,
 			jhead_mount_width, jhead_mount_height, jhead_mount_thickness, jhead_mount_vertical_offset,
-			grip_width, grip_height, grip_thickness, grip_extra, grip_hole,
+			grip_offset, grip_width, grip_height, grip_thickness, grip_extra, grip_hole,
 			jhead_body_dia, jhead_body_height, jhead_body_size, hole_offset, added_cap_width );
 }
 if( extruder == 2 ) {
@@ -55,7 +56,7 @@ if( extruder == 2 ) {
 			linear_bearing_diameter, linear_bearing_inner_diameter, 
 			linear_bearing_thickness, linear_bearing_separation, rod_separation,
 			jhead_mount_width, jhead_mount_height, jhead_mount_thickness, jhead_mount_vertical_offset,
-			grip_width, grip_height, grip_thickness, grip_extra, grip_hole,
+			grip_offset, grip_width, grip_height, grip_thickness, grip_extra, grip_hole,
 			e3d_body_dia, e3d_body_height, e3d_body_size, hole_offset, added_cap_width );
 }
 
@@ -63,7 +64,7 @@ if( extruder == 2 ) {
 module mount( b_width, b_height, b_thickness, f_size, s_style,
 					lb_diameter, lb_inner_diameter, lb_thickness, lb_separation, r_separation,
 					e_width, e_height, e_thickness, e_vert_offset,
-					g_width, g_height, g_thickness, g_extra, g_hole,
+					g_offset, g_width, g_height, g_thickness, g_extra, g_hole,
 					body_dia, body_height, body_size, h_offset,c_width ) {
 	mount_holes = [[ (b_width/2-h_offset), (b_height/2-h_offset)],
 						[ (b_width/2-h_offset),-(b_height/2-h_offset)],
@@ -87,7 +88,7 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 								-b_height/2+brace_height/2,
 								 b_thickness/2]) {
 					cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
-					translate([g_thickness/2-(brace_width-b_width)/4,0,g_height/2+b_thickness/2]) 
+					translate([g_thickness/2-(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
 						difference() {
 							cube([g_thickness,g_width + g_extra*2,g_height],center = true);
 							translate([0,0,-g_height/2+g_hole/2])
@@ -98,7 +99,7 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 								-b_height/2+brace_height/2,
 								 b_thickness/2]) {
 					cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
-					translate([-g_thickness/2+(brace_width-b_width)/4,0,g_height/2+b_thickness/2]) 
+					translate([-g_thickness/2+(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
 						difference() {
 							cube([g_thickness,g_width + g_extra*2,g_height],center = true);
 							translate([0,0,-g_height/2+g_hole/2])
@@ -126,30 +127,17 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 					}
 				}
 				if( slot_style == false ) translate( [0,e_vert_offset+e_height/2,0]) { 
-					translate([0,0,b_thickness+box_thickness]) mirror([0,0,1]) {
-						hole(	-(e_width/4+(body_size+c_width)/4),
-								-(body_height[0]+body_height[1])/2-b_thickness,
-									m3_diameter/2,box_thickness-m3_nut_thickness-0.1 );
-						hole(	 (e_width/4+(body_size+c_width)/4),
-								-(body_height[0]+body_height[1])/2-b_thickness,
-									m3_diameter/2,box_thickness-m3_nut_thickness-0.1 );
-					//the -nut_thickness-0.1 is so there is that 1 layer bridge for support
-					}
 					//nut traps
-					translate([	-(e_width/4+(body_dia[0]+c_width)/4),
+					translate([-(e_width/4+(body_size+c_width)/4),
 									-(body_height[0]+body_height[1])/2-b_thickness,
-									b_thickness+0.1])
-						hull(){
-							cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-							translate([-5,0,0]) cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-						}
-					translate([  (e_width/4+(body_dia[0]+c_width)/4),
+									 b_thickness+box_thickness+0.1])
+						nut_trap_hole(m3_diameter/2,box_thickness,box_thickness,
+											m3_nut_thickness,m3_nut_diameter/2,-5);
+					translate([ (e_width/4+(body_size+c_width)/4),
 									-(body_height[0]+body_height[1])/2-b_thickness,
-									b_thickness+0.1])
-						hull(){
-							cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-							translate([5,0,0]) cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-						}
+									 b_thickness+box_thickness+0.1])
+						nut_trap_hole(m3_diameter/2,box_thickness,box_thickness,
+											m3_nut_thickness,m3_nut_diameter/2,5);
 					//end nut traps
 				}
 				for( i = [0:3] ) {
@@ -159,64 +147,35 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 					through_hole( brace_holes[i][0], brace_holes[i][1],m3_diameter/2,100);
 				}
 
-				translate([-(b_width/2+(brace_width-b_width)/4)-(brace_width-b_width)/4+g_thickness/2,
-								-b_height/2+brace_height/2,
-								 b_thickness]) {
-					translate([0,g_width/2+g_extra/2,0]) {
-						translate([0,0,g_height+0.1]) mirror([0,0,1])
-							cylinder( r = m3_diameter/2, h = g_height*2/3-m3_nut_thickness-0.1, $fn = 100 );
-						translate([0,0,g_height*1/3+0.1]) {
-							hull(){
-								cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-								translate([g_thickness,0,0]) 
-									cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-							}
-							translate([0,0,0.1]) mirror([0,0,1]) cylinder( r = m3_diameter/2, h = g_height*1/3, $fn = 100 );
+				translate([0,g_offset, 0]) { //translate to the offset
+					translate([-(b_width/2+(brace_width-b_width)/4)-(brace_width-b_width)/4+g_thickness/2,
+									-b_height/2+brace_height/2,
+									 b_thickness]) {
+						
+						translate([0,g_width/2+g_extra/2,g_height+0.1])
+							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+												m3_nut_thickness,m3_nut_diameter/2,g_thickness);
+						translate([0,-(g_width/2+g_extra/2),g_height+0.1])
+							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+												m3_nut_thickness,m3_nut_diameter/2,g_thickness);
+						translate([ g_thickness/2+0.1,0,g_height/2+ g_hole/2])rotate([0,90,0])mirror([0,0,1]) {
+							cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
+							cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
 						}
 					}
-					translate([0,-(g_width/2+g_extra/2),0]) {
-						translate([0,0,g_height+0.1]) mirror([0,0,1])
-						cylinder( r = m3_diameter/2, h = g_height*2/3-m3_nut_thickness-0.1, $fn = 100 );												translate([0,0,g_height*1/3+0.1]) {
-							hull(){
-								cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-								translate([g_thickness,0,0]) 
-									cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-							}
-							translate([0,0,0.1]) mirror([0,0,1]) cylinder( r = m3_diameter/2, h = g_height*1/3, $fn = 100 );
+					translate([(b_width/2+(brace_width-b_width)/4)+(brace_width-b_width)/4-g_thickness/2,
+									-b_height/2+brace_height/2,
+									 b_thickness]) {
+						translate([0,g_width/2+g_extra/2,g_height+0.1])
+							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+												m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
+						translate([0,-(g_width/2+g_extra/2),g_height+0.1])
+							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+												m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
+						translate([-g_thickness/2-0.1,0,g_height/2+ g_hole/2])rotate([0,90,0]) {
+							cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
+							cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
 						}
-					}
-					translate([ g_thickness/2+0.1,0,g_height/2+ g_hole/2])rotate([0,90,0])mirror([0,0,1]) {
-						cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
-					}
-				}
-				translate([(b_width/2+(brace_width-b_width)/4)+(brace_width-b_width)/4-g_thickness/2,
-								-b_height/2+brace_height/2,
-								 b_thickness]) {
-					translate([0,g_width/2+g_extra/2,0]) {
-						translate([0,0,g_height+0.1]) mirror([0,0,1])
-							cylinder( r = m3_diameter/2, h = g_height*2/3-m3_nut_thickness-0.1, $fn = 100 );											translate([0,0,g_height*1/3+0.1]) {
-							hull() {
-								cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-								translate([-g_thickness,0,0]) 
-									cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-							}
-							translate([0,0,0.1]) mirror([0,0,1]) cylinder( r = m3_diameter/2, h = g_height*1/3, $fn = 100 );
-						}
-					}
-					translate([0,-(g_width/2+g_extra/2),0]) {
-						translate([0,0,g_height+0.1]) mirror([0,0,1])
-						cylinder( r = m3_diameter/2, h = g_height*2/3-m3_nut_thickness-0.1, $fn = 100 );											translate([0,0,g_height*1/3+0.1]) { hull(){
-								cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-								translate([-g_thickness,0,0]) 
-									cylinder( r = m3_nut_diameter/2, h = m3_nut_thickness, $fn = 6 );
-							}
-							translate([0,0,0.1]) mirror([0,0,1]) cylinder( r = m3_diameter/2, h = g_height*1/3, $fn = 100 );
-						}
-					}
-					translate([-g_thickness/2-0.1,0,g_height/2+ g_hole/2])rotate([0,90,0]) {
-						cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
 					}
 				}
 			}// union removal section
@@ -285,10 +244,6 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 		}
 	}//union
 }
-
-
-
-
 
 
 module jhead_hull( body_dia, body_height, f_size, b_thickness, hull_length = [0,0,0] ) {

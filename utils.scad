@@ -26,6 +26,19 @@ module through_hole(x,y,rad,deep,fn=100) {
 	translate([x,y,-deep/2-0.1]) cylinder(r=rad,h=deep,$fn=fn);
 }
 
+module nut_trap_hole(radius,height,nut_depth,nut_thickness,nut_size,trap_size) {
+	mirror([0,0,1])
+		cylinder( r = radius, h = nut_depth-nut_thickness-0.1, $fn = 100 );
+	translate([0,0,-nut_depth+0.1]) {
+		hull(){
+			cylinder( r = nut_size, h = nut_thickness, $fn = 6 );
+			translate([trap_size,0,0]) 
+				cylinder( r = nut_size, h = nut_thickness, $fn = 6 );
+		}
+		translate([0,0,0.1]) mirror([0,0,1]) cylinder( r = radius, h = height-nut_depth, $fn = 100 );
+	}
+}
+
 module braced_L_bracket(width, length, thickness) {
 	union(){
 		non_braced_L_bracket( width,length, thickness );
