@@ -83,43 +83,10 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 				translate([0,0,b_thickness/2])
 					cube([b_width,b_height,b_thickness],center=true);
 
-
-				translate([-(b_width/2+(brace_width-b_width)/4),
-								-b_height/2+brace_height/2,
-								 b_thickness/2]) {
-					cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
-					translate([g_thickness/2-(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
-						difference() {
-							cube([g_thickness,g_width + g_extra*2,g_height],center = true);
-							translate([0,0,-g_height/2+g_hole/2])
-								cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
-						}
-					translate([-g_thickness*2,0,0]) 
-							cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
-				}
-				translate([ (b_width/2+(brace_width-b_width)/4),
-								-b_height/2+brace_height/2,
-								 b_thickness/2]) {
-					cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
-					translate([-g_thickness/2+(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
-						difference() {
-							cube([g_thickness,g_width + g_extra*2,g_height],center = true);
-							translate([0,0,-g_height/2+g_hole/2])
-								cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
-						}
-					translate([g_thickness*2,0,0]) 
-							cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
-						
-				}
 				translate([0,e_vert_offset,b_thickness+box_thickness/2])
 						cube([e_width,e_height,box_thickness],center=true);
 				for( i = [0:3] ) {
 					translate([mount_holes[i][0],mount_holes[i][1],b_thickness])
-						cylinder( r = m3_diameter*1.5,h = 1);
-				}
-
-				translate([0,-b_height/2+brace_height/2,0]) for( i = [0:3] ) {
-					translate([	brace_holes[i][0], brace_holes[i][1],b_thickness])
 						cylinder( r = m3_diameter*1.5,h = 1);
 				}
 			}//union add section
@@ -148,49 +115,7 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 				for( i = [0:3] ) {
 					through_hole( mount_holes[i][0], mount_holes[i][1],m3_diameter/2,100);
 				}
-				translate([0,-b_height/2+brace_height/2,0]) for( i = [0:3] ) {
-					through_hole( brace_holes[i][0], brace_holes[i][1],m3_diameter/2,100);
-				}
 
-				translate([0,g_offset, 0]) { //translate to the offset
-					translate([-(b_width/2+(brace_width-b_width)/4)-(brace_width-b_width)/4+g_thickness/2,
-									-b_height/2+brace_height/2,
-									 b_thickness]) {
-						
-						translate([0,g_width/2+g_extra/2,g_height+0.1])
-							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-												m3_nut_thickness,m3_nut_diameter/2,g_thickness);
-						translate([0,-(g_width/2+g_extra/2),g_height+0.1])
-							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-												m3_nut_thickness,m3_nut_diameter/2,g_thickness);
-						translate([-(g_thickness*2-g_thickness/4),0,0]) {
-							through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
-							through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
-						}
-						translate([ g_thickness/2+0.1,0,g_height/2+ g_hole/2])rotate([0,90,0])mirror([0,0,1]) {
-							cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
-							cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
-						}
-					}
-					translate([(b_width/2+(brace_width-b_width)/4)+(brace_width-b_width)/4-g_thickness/2,
-									-b_height/2+brace_height/2,
-									 b_thickness]) {
-						translate([0,g_width/2+g_extra/2,g_height+0.1])
-							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-												m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
-						translate([0,-(g_width/2+g_extra/2),g_height+0.1])
-							nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-												m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
-						translate([ (g_thickness*2-g_thickness/4),0,0]) {
-							through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
-							through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
-						}
-						translate([-g_thickness/2-0.1,0,g_height/2+ g_hole/2])rotate([0,90,0]) {
-							cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
-							cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
-						}
-					}
-				}
 			}// union removal section
 		}//end difference
 		if( s_style == false ) {
