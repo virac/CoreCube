@@ -14,10 +14,10 @@ rod_separation = 35;
 rod_thickness = 5;
 
 grip_offset = 0;
-grip_width = 10;
+grip_width = 15;
 grip_height = m5_nut_diameter + 8; //6.4+8=14.8
 grip_thickness = 10;
-grip_extra = 10;
+grip_extra = 15;
 grip_hole = 4;
 
 base_mount_thickness = 4;
@@ -76,11 +76,11 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 				translate([g_thickness/2-(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
 					difference() {
 						hull() {
-							cube([g_thickness,g_width + g_extra,g_height],center = true);
+							cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
 
-							translate([0,g_width/2+g_extra/2,-g_height/2])
+							translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
 								cylinder( r = g_thickness/2,h = g_height);
-							translate([0,-(g_width/2+g_extra/2),-g_height/2])
+							translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
 								cylinder( r = g_thickness/2,h = g_height);
 						}
 						translate([0,0,-g_height/2+g_hole/2])
@@ -90,38 +90,38 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					//cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
 					hull() {
 						cube([g_thickness,g_width + g_extra,b_thickness],center = true);
-							translate([0,g_width/2+g_extra/2,-b_thickness/2])
+							translate([0,g_width/2+g_extra-g_thickness/2,-b_thickness/2])
 							cylinder( r = g_thickness/2,h = b_thickness);
-						translate([0,-(g_width/2+g_extra/2),-b_thickness/2])
+						translate([0,-(g_width/2+g_extra-g_thickness/2),-b_thickness/2])
 							cylinder( r = g_thickness/2,h = b_thickness);
 					}
 			}
-			#translate([2*g_thickness + (b_width/2+(brace_width-b_width)/4),
+			translate([2*g_thickness + (b_width/2+(brace_width-b_width)/4),
 							0, b_thickness/2]) {
 				cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
 				translate([-g_thickness/2+(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
 					difference() {
 						hull() {
-							cube([g_thickness,g_width + g_extra,g_height],center = true);
+						#	cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
 
-							translate([0,g_width/2+g_extra/2,-g_height/2])
+							translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
 								cylinder( r = g_thickness/2,h = g_height);
-							translate([0,-(g_width/2+g_extra/2),-g_height/2])
+							translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
 								cylinder( r = g_thickness/2,h = g_height);
 						}
 						translate([0,0,-g_height/2+g_hole/2])
 							cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
 					}
-				#translate([g_thickness*2,0,0]) 
-						//cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
-						hull() {
-							cube([g_thickness,g_width + g_extra,b_thickness],center = true);
-
-							translate([0,g_width/2+g_extra/2,-b_thickness/2])
-								cylinder( r = g_thickness/2,h = b_thickness);
-							translate([0,-(g_width/2+g_extra/2),-b_thickness/2])
-								cylinder( r = g_thickness/2,h = b_thickness);
-						}
+				translate([g_thickness*2,0,0]) 
+				//cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
+					hull() {
+						cube([g_thickness,g_width + 2*g_extra - g_thickness,b_thickness],center = true);
+	
+						translate([0,g_width/2+g_extra-g_thickness/2,-b_thickness/2])
+							cylinder( r = g_thickness/2,h = b_thickness);
+						translate([0,-(g_width/2+g_extra-g_thickness/2),-b_thickness/2])
+							cylinder( r = g_thickness/2,h = b_thickness);
+					}
 			}
 			for( i = [0:3] ) {
 				translate([	brace_holes[i][0], brace_holes[i][1],h_thickness/2])
@@ -154,7 +154,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 				translate([-2*g_thickness -(b_width/2+(brace_width-b_width)/4)-(brace_width-b_width)/4+g_thickness/2,
 								0, b_thickness]) {
 					
-					translate([0,g_width/2+g_extra/2,g_height+0.1])
+				#	translate([0,g_width/2+g_extra/2,g_height+0.1])
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,g_thickness);
 					translate([0,-(g_width/2+g_extra/2),g_height+0.1])
@@ -177,7 +177,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					translate([0,-(g_width/2+g_extra/2),g_height+0.1])
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
-					translate([-((brace_width-b_width)/4-g_thickness/2)+2*g_thickness,0,0]) {
+				#	translate([-((brace_width-b_width)/4-g_thickness/2)+2*g_thickness,0,0]) {
 						through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
 						through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 					}
