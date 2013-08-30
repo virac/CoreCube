@@ -102,7 +102,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 				translate([-g_thickness/2+(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
 					difference() {
 						hull() {
-						#	cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
+							cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
 
 							translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
 								cylinder( r = g_thickness/2,h = g_height);
@@ -154,7 +154,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 				translate([-2*g_thickness -(b_width/2+(brace_width-b_width)/4)-(brace_width-b_width)/4+g_thickness/2,
 								0, b_thickness]) {
 					
-				#	translate([0,g_width/2+g_extra/2,g_height+0.1])
+					translate([0,g_width/2+g_extra/2,g_height+0.1])
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,g_thickness);
 					translate([0,-(g_width/2+g_extra/2),g_height+0.1])
@@ -177,7 +177,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					translate([0,-(g_width/2+g_extra/2),g_height+0.1])
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
-				#	translate([-((brace_width-b_width)/4-g_thickness/2)+2*g_thickness,0,0]) {
+					translate([-((brace_width-b_width)/4-g_thickness/2)+2*g_thickness,0,0]) {
 						through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
 						through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 					}
