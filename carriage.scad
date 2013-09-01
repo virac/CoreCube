@@ -178,6 +178,8 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
 					translate([-((brace_width-b_width)/4-g_thickness/2)+2*g_thickness,0,0]) {
+						translate([0,-g_width/2,-GT2_2mm_depth()/2]) rotate([-90,0,0])
+						#		GT2_2mm(g_width);
 						through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
 						through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 					}
@@ -191,4 +193,11 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 
 		}
 	}//difference
+}
+
+function GT2_2mm_width() = 1.494;
+function GT2_2mm_depth() = 0.764;
+module GT2_2mm(h)
+{
+	linear_extrude(height=h) polygon([[0.747183,-0.5],[0.747183,0],[0.647876,0.037218],[0.598311,0.130528],[0.578556,0.238423],[0.547158,0.343077],[0.504649,0.443762],[0.451556,0.53975],[0.358229,0.636924],[0.2484,0.707276],[0.127259,0.750044],[0,0.76447],[-0.127259,0.750044],[-0.2484,0.707276],[-0.358229,0.636924],[-0.451556,0.53975],[-0.504797,0.443762],[-0.547291,0.343077],[-0.578605,0.238423],[-0.598311,0.130528],[-0.648009,0.037218],[-0.747183,0],[-0.747183,-0.5]]);
 }
