@@ -161,6 +161,11 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,g_thickness);
 					translate([((brace_width-b_width)/4-g_thickness/2)-(g_thickness*2),0,0]) {
+						for( i = [-3:3] )
+						{
+							translate([i*GT2_2mm_width(),-g_width/2,0]) rotate([-90,0,0])
+								GT2_2mm(g_width);
+						}
 						through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
 						through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 					}
@@ -178,8 +183,11 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
 											m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
 					translate([-((brace_width-b_width)/4-g_thickness/2)+2*g_thickness,0,0]) {
-						translate([0,-g_width/2,-GT2_2mm_depth()/2]) rotate([-90,0,0])
-						#		GT2_2mm(g_width);
+						for( i = [-3:3] )
+						{
+							translate([i*GT2_2mm_width(),-g_width/2,0]) rotate([-90,0,0])
+								GT2_2mm(g_width);
+						}
 						through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
 						through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 					}
