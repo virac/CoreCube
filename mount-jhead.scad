@@ -77,6 +77,8 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 						[-(brace_width/2-h_offset), (brace_height/2-h_offset)],
 						[-(brace_width/2-h_offset),-(brace_height/2-h_offset)]];
 	box_thickness = max(e_thickness,f_size+2);
+	nut_depth = min( box_thickness, 19-b_thickness );
+	bolt_length = max( box_thickness, 21-b_thickness );
 	union() {
 		difference() {
 			union() { //add section
@@ -103,12 +105,12 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 					translate([-(e_width/4+(body_size+c_width)/4),
 									-(body_height[0]+body_height[1])/2-b_thickness,
 									 b_thickness+box_thickness+0.1])
-						nut_trap_hole(m3_diameter/2,box_thickness,box_thickness,
+						nut_trap_hole(m3_diameter/2,box_thickness,nut_depth,
 											m3_nut_thickness,m3_nut_diameter/2,-5);
 					translate([ (e_width/4+(body_size+c_width)/4),
 									-(body_height[0]+body_height[1])/2-b_thickness,
 									 b_thickness+box_thickness+0.1])
-						nut_trap_hole(m3_diameter/2,box_thickness,box_thickness,
+						nut_trap_hole(m3_diameter/2,box_thickness,nut_depth,
 											m3_nut_thickness,m3_nut_diameter/2,5);
 					//end nut traps
 				}
