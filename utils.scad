@@ -202,7 +202,7 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 		union() {
 			hull() {
 				cylinder( r = lb_diameter/2 + thickness, h = lb_thickness, center= true, $fn = 100 );
-				translate([lb_diameter/2+thickness,-(gap/2+thickness),-lb_thickness/2]) scale([holder_clasp,gap+thickness*2, lb_thickness]) cube( 1 );
+				translate([lb_diameter/2+thickness,-(gap/2+thickness),-lb_thickness/2]) scale([clasp,gap+thickness*2, lb_thickness]) cube( 1 );
 
 
 			}
@@ -221,7 +221,7 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 				}
 			}
 			if( support == true ) {
-				rotate([0,0,linear_bearing_rotate]){
+				rotate([0,0,lb_rotate]){
 					translate([0,lb_thickness/2-lb_diameter+thickness/1.5,-lb_thickness/2]) rotate([90,0,180])
 						linear_extrude(height = thickness*2) 
 							polygon([	[lb_thickness/2,lb_thickness],
