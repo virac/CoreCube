@@ -197,7 +197,7 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 }
 
 
-module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false, lb_rotate = 0 ) {
+module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false, lb_rotate = 0, support_hole = true ) {
 	rotate([0,0,-lb_rotate]) translate([0,0,-0.1]) difference() {
 		union() {
 			hull() {
@@ -248,11 +248,13 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
 
 		
-		rotate([0,0,lb_rotate])
+		if( support == true && support_hole == true ) {
+			rotate([0,0,lb_rotate])
 //			translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) 
-			translate([-lb_diameter/2-lb_thickness/2-1,0,-thickness*3]) 
-				rotate([90,0,180])
-					cylinder( r = m3_diameter/2, h = 3*thickness, center= true, $fn = 100 );
+				translate([-lb_diameter/2-lb_thickness/2-1,0,-thickness*3]) 
+					rotate([90,0,180])
+						cylinder( r = m3_diameter/2, h = 3*thickness, center= true, $fn = 100 );
+		}
 	}//difference
 }
 

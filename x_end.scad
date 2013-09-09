@@ -39,13 +39,18 @@ mirror([1,0,0]) translate ([15,0,0])
 
 
 translate([0,-rod_grip,20]) rotate([180,-90,0]){
-		translate([0,0,linear_bearing_thickness/2])
-		linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
+		translate([0,0,linear_bearing_thickness/2]) {
+			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
 											holder_gap, holder_thickness,holder_clasp, true );
-		mirror([0,0,1]) 
-		translate([0,0,linear_bearing_thickness/2])
-		linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
+			linear_bearing_holder_support( linear_bearing_diameter, linear_bearing_thickness, 
+											holder_gap, holder_thickness,holder_clasp );
+		}
+		mirror([0,0,1]) translate([0,0,linear_bearing_thickness/2]) {
+			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
 											holder_gap, holder_thickness,holder_clasp, true );
+			linear_bearing_holder_support( linear_bearing_diameter, linear_bearing_thickness, 
+											holder_gap, holder_thickness,holder_clasp );
+		}
 }
 
 module x_end( lb_diameter, lb_inner_diameter, lb_thickness, 
@@ -239,3 +244,21 @@ module belt_bearing_support2( thickness, height,additional_height, width ) {
 	//									[-height-0.1,0] ] );
 	}
 }
+
+
+module linear_bearing_holder_support( lb_d, lb_t, h_g, h_t,h_c ) {
+	difference() {
+		rotate([0,0,lb_rotate]){
+			translate([0,-lb_d/2.8,-lb_t/2]) rotate([90,0,180])
+				linear_extrude(height = lb_d*3/4) 
+					polygon([	[lb_t/2,lb_t],
+									[lb_t/2-h_t*1.2,lb_t],
+									[lb_t/2-h_t*1.2,0],
+									[lb_t+1,0],
+									[lb_t+1,h_t*4]]);
+		}
+
+		scale([ 1.01,1.1,1.1])	linear_bearing_holder( lb_d, lb_t, h_g, h_t,h_c,true,0, false );
+	}
+}
+
