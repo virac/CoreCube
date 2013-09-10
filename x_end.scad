@@ -69,83 +69,92 @@ module x_end( lb_diameter, lb_inner_diameter, lb_thickness,
 													bearing_diameter/2 + bearing_inner_diameter/2 + 4,
 													bearing_inner_diameter ,8 );
 			} // union
-			translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-4]) 
-				cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
-
-
-			translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
-				linear_bearing_holder( lb_diameter, lb_thickness, 
-											gap, h_thickness,clasp, true );
+			union() {
+				translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-4]) 
+					cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
+	
+				translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
+					linear_bearing_holder( lb_diameter, lb_thickness, 
+												gap, h_thickness,clasp, true );
+			}
 		} // difference
-//
-//		translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
-//		linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
-//											holder_gap, holder_thickness,holder_clasp, true );
 	}
 }
-
 module x_end_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, thickness, gap, h_thickness,clasp, bolt_rez ) {
+	add_additional = false;
 	translate([thickness/2,0,0]) difference() {
 		union() {
-			translate([-dist_from_rod_x/4,lb_diameter/4+h_thickness/2,0]) scale([grip+abs(dist_from_rod_x/2), lb_diameter + separation + r_diameter + thickness*2 - h_thickness,r_diameter/2+thickness]) 
-				cube(1,center = true);
-			//translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+ separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) hull() {
-			//	cylinder( r = lb_diameter/2 + h_thickness, h = r_diameter/2+ thickness, center= true, $fn = 100 );
-			//	translate([lb_diameter/2+h_thickness,-(gap/2+h_thickness),-(r_diameter/2+ thickness)/2])
-			//		 scale([holder_clasp,gap+h_thickness*2, r_diameter/2+ thickness]) cube( 1 );
-			//}
+			translate([-dist_from_rod_x/4,lb_diameter/4+h_thickness/2,0]) 
+				cube([grip+abs(dist_from_rod_x/2),
+						lb_diameter + separation + r_diameter + thickness*2 - h_thickness,
+						r_diameter/2+thickness],center = true);
+			
+			if( add_additional == true ) {//not currently used
+				translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+ separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) hull() {
+					cylinder( r = lb_diameter/2 + h_thickness, h = r_diameter/2+ thickness, center= true, $fn = 100 );
+					translate([lb_diameter/2+h_thickness,-(gap/2+h_thickness),-(r_diameter/2+ thickness)/2])
+						 cube( [holder_clasp,gap+h_thickness*2, r_diameter/2+ thickness] );
+				}
+			}
 
 		}// union
+		union() {
+			//Rods
+			translate([0,lb_diameter/4-.5,0]) rotate([0,-90,0]) translate([-r_diameter/2,0,-grip/2-0.1]) union() {
+				translate([0,separation/2,0]) cylinder( r = r_diameter/2, h = grip*2, $fn = 100 );
+				translate([0,-separation/2,0]) cylinder( r = r_diameter/2, h = grip*2, $fn = 100 );
+			}
 	
-		//Rods
-		translate([0,lb_diameter/4-.5,0]) rotate([0,-90,0]) translate([-r_diameter/2,0,-grip/2-0.1]) union() {
-			translate([0,separation/2,0]) cylinder( r = r_diameter/2, h = grip*2, $fn = 100 );
-			translate([0,-separation/2,0]) cylinder( r = r_diameter/2, h = grip*2, $fn = 100 );
-		}
-
-		//bearing holder cutout
-		/*translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) union() {
-				translate([0,0,-r_diameter/4]) cylinder( r = lb_diameter/2, h = r_diameter/2+0.1, center= true, $fn = 100 );
-				translate([0,0,r_diameter/4]) cylinder( r = lb_diameter/2, h = thickness+0.1, center= true, $fn = 100 );
-				translate([lb_diameter/2-10,-gap/2,-lb_thickness/2-1]) scale([lb_diameter+10,gap, lb_thickness+2]) cube( 1 );
-		}*/
-		//Linear Bearing Mount Holes
-		
-		translate([-10.2,-35,0.5]) rotate([90,90,0]) {
-			
-			nut_trap_hole(m3_diameter/2,h_thickness*3,h_thickness*5.5,
-										m3_nut_thickness,m3_nut_diameter/2,-5-h_thickness);
-//			cylinder( r = m3_diameter/2, h = thickness*3, $fn = 100 );
-			//translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
-		}
-
-
-		//bolt holes
-		translate([-3,-24,-thickness-0.1]) {
-			cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
-			translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
-		}
-
-		//middle bolts
-		translate([0,4.25,-thickness-0.1]) {
-			translate([11,0,0]) {
-				cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
-				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+			//bearing holder cutout
+			if( add_additional == true ) {
+				translate([-linear_bearing_center+grip/2-thickness/2,-(lb_diameter/4+separation/2 + r_diameter/2 + thickness),0]) rotate([0,0,-linear_bearing_rotate]) union() {
+					translate([0,0,-r_diameter/4]) 
+						cylinder( r = lb_diameter/2, h = r_diameter/2+0.1, center= true, $fn = 100 );
+					translate([0,0,r_diameter/4]) 
+						cylinder( r = lb_diameter/2, h = thickness+0.1, center= true, $fn = 100 );
+					translate([lb_diameter/2-10,-gap/2,-lb_thickness/2-1]) 
+						cube( [lb_diameter+10,gap, lb_thickness+2] );
+				}
 			}
-			translate([-6,0,0]) {
-				cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
-				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+			//Linear Bearing Mount Holes
+			translate([-10.2,-35,0.5]) rotate([90,90,0]) {
+				nut_trap_hole(m3_diameter/2,h_thickness*3,h_thickness*5.5,
+											m3_nut_thickness,m3_nut_diameter/2,-5-h_thickness);
 			}
-		}
-		//bottom bolts
-		translate([0,33.5,-thickness-0.1]) {
-			translate([11,0,0]) {
+	
+	
+			//bolt holes
+			translate([-3,-24,-thickness-0.1]) {
 				cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
-				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) 
+					cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
 			}
-			translate([-6,0,0]) {
-				cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
-				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+	
+			//middle bolts
+			translate([0,4.25,-thickness-0.1]) {
+				translate([11,0,0]) {
+					cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
+					translate([0,0,thickness*2+0.2]) mirror([0,0,1]) 
+						cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+				}
+				translate([-6,0,0]) {
+					cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
+					translate([0,0,thickness*2+0.2]) mirror([0,0,1]) 
+						cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+				}
+			}
+			//bottom bolts
+			translate([0,33.5,-thickness-0.1]) {
+				translate([11,0,0]) {
+					cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
+					translate([0,0,thickness*2+0.2]) mirror([0,0,1]) 
+						cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+				}
+				translate([-6,0,0]) {
+					cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
+					translate([0,0,thickness*2+0.2]) mirror([0,0,1]) 
+						cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
+				}
 			}
 		}
 	}
@@ -248,16 +257,14 @@ module belt_bearing_support2( thickness, height,additional_height, width ) {
 
 module linear_bearing_holder_support( lb_d, lb_t, h_g, h_t,h_c ) {
 	difference() {
-		rotate([0,0,lb_rotate]){
-			translate([0,-lb_d/2.8,-lb_t/2]) rotate([90,0,180])
-				linear_extrude(height = lb_d*3/4) 
-					polygon([	[lb_t/2,lb_t],
-									[lb_t/2-h_t*1.2,lb_t],
-									[lb_t/2-h_t*1.2,0],
-									[lb_t+1,0],
-									[lb_t+1,h_t*4]]);
-		}
-
+		translate([0,-lb_d/2.8,-lb_t/2]) rotate([90,0,180])
+			linear_extrude(height = lb_d*3/4) 
+				polygon([	[lb_t/2,lb_t],
+								[lb_t/2-h_t*1.2,lb_t],
+								[lb_t/2-h_t*1.2,0],
+								[lb_t+1,0],
+								[lb_t+1,lb_t*3/4]]);
+		
 		scale([ 1.01,1.1,1.1])	linear_bearing_holder( lb_d, lb_t, h_g, h_t,h_c,true,0, false );
 	}
 }
