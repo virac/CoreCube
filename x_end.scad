@@ -71,11 +71,11 @@ module x_end( lb_diameter, lb_inner_diameter, lb_thickness,
 			} // union
 			union() {
 				translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-4]) 
-					cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
+			#		cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
 	
-				translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
+			/*	translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
 					linear_bearing_holder( lb_diameter, lb_thickness, 
-												gap, h_thickness,clasp, true );
+												gap, h_thickness,clasp, true );*/
 			}
 		} // difference
 	}
@@ -118,13 +118,13 @@ module x_end_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, th
 			}
 			//Linear Bearing Mount Holes
 			translate([-10.2,-35,0.5]) rotate([90,90,0]) {
-				nut_trap_hole(m3_diameter/2,h_thickness*3,h_thickness*5.5,
+				nut_trap_hole(m3_diameter/2,h_thickness*6,h_thickness*5,
 											m3_nut_thickness,m3_nut_diameter/2,-5-h_thickness);
 			}
 	
 	
-			//bolt holes
-			translate([-3,-24,-thickness-0.1]) {
+			// top bolt hole
+			translate([-2,-24,-thickness-0.1]) {
 				cylinder( r = m5_diameter/2, h = thickness*3, $fn = 100 );
 				translate([0,0,thickness*2+0.2]) mirror([0,0,1]) 
 					cylinder( r = m5_nut_diameter/2, h = thickness, $fn = bolt_rez );
