@@ -71,7 +71,7 @@ module x_end( lb_diameter, lb_inner_diameter, lb_thickness,
 			} // union
 			union() {
 				translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-4]) 
-			#		cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
+					cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness, center= true, $fn = 100 );
 	
 			/*	translate([-linear_bearing_center+r_grip/2,0,r_thickness/2 + r_diameter/4-.4])
 					linear_bearing_holder( lb_diameter, lb_thickness, 
@@ -261,8 +261,8 @@ module linear_bearing_holder_support( lb_d, lb_t, h_g, h_t,h_c ) {
 			linear_extrude(height = lb_d*3/4) 
 				polygon([	[lb_t/2,lb_t],
 								[lb_t/2-h_t*1.2,lb_t],
-								[lb_t/2-h_t*1.2,0],
-								[lb_t+1,0],
+								[lb_t/2-h_t*1.2,-1],
+								[lb_t+1,-1],
 								[lb_t+1,lb_t*3/4]]);
 		
 		scale([ 1.01,1.1,1.1])	linear_bearing_holder( lb_d, lb_t, h_g, h_t,h_c,true,0, false );
