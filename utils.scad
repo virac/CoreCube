@@ -222,13 +222,20 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 			}
 			if( support == true ) {
 				rotate([0,0,lb_rotate]){
-					translate([0,lb_thickness/2-lb_diameter+thickness/1.5,-lb_thickness/2]) rotate([90,0,180])
+					translate([0,lb_thickness/2-lb_diameter+thickness/1.5,-lb_thickness/2]) rotate([90,0,180]) {
 						linear_extrude(height = thickness*2) 
 							polygon([	[lb_thickness/2,lb_thickness],
 											[0,lb_thickness],
 											[0,0],
 											[lb_thickness+1,0],
 											[lb_thickness+1,thickness*4]]);
+						translate([lb_diameter/2+thickness/2-1,lb_thickness/2,thickness]) 
+							intersection() {
+								rotate([0,45,0])
+									cube([thickness*3,lb_thickness,thickness*3],center = true);
+								cube([thickness*2.5,lb_thickness,thickness*4],center = true);
+							}
+					}
 				}
 			}// if support
 		} //union
