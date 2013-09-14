@@ -70,35 +70,45 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 				}
 			}
 
-			translate([-2*g_thickness -(b_width/2+(brace_width-b_width)/4),
+			translate([-g_thickness -(b_width/2+(brace_width-b_width)/4),
 							0, b_thickness/2]) {
-				cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
-				translate([g_thickness/2-(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
-					difference() {
-						hull() {
-							cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
-
-							translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
-								cylinder( r = g_thickness/2,h = g_height);
-							translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
-								cylinder( r = g_thickness/2,h = g_height);
-						}
-						union() {
-							translate([0,0,-g_height/2+g_hole/2])
-								cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
-							translate([0,g_width/2+g_extra/2,g_height/2+0.1])
-								nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-													m3_nut_thickness,m3_nut_diameter/2,g_thickness);
-							translate([0,-(g_width/2+g_extra/2),g_height/2+0.1])
-								nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-													m3_nut_thickness,m3_nut_diameter/2,g_thickness);
-							translate([ g_thickness/2+0.1,0,g_hole/2])rotate([0,90,0])mirror([0,0,1]) {
-								cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
-								cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
+				rotate([0,-90,0])  difference() {
+					union() {
+						cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
+						translate([g_thickness/2-(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
+							difference() {
+								hull() {
+									cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
+		
+									translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
+										cylinder( r = g_thickness/2,h = g_height);
+									translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
+										cylinder( r = g_thickness/2,h = g_height);
+								}
+								union() {
+									translate([0,0,-g_height/2+g_hole/2])
+										cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
+									translate([0,g_width/2+g_extra/2,g_height/2+0.1])
+										nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+															m3_nut_thickness,m3_nut_diameter/2,g_thickness);
+									translate([0,-(g_width/2+g_extra/2),g_height/2+0.1])
+										nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+															m3_nut_thickness,m3_nut_diameter/2,g_thickness);
+									translate([ g_thickness/2+0.1,0,g_hole/2])rotate([0,90,0])mirror([0,0,1]) {
+										cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
+										cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
+									}
+								}
 							}
-						}
+						translate([	0, brace_holes[0][1],b_thickness/2])
+							cylinder( r2 = m3_diameter*1.5, r1 = (brace_width-b_width)/4,h = 1);
+						translate([	0, brace_holes[1][1],b_thickness/2])
+							cylinder( r2 = m3_diameter*1.5, r1 = (brace_width-b_width)/4,h = 1);
 					}
-				translate([-g_thickness*2,g_width,0]) 
+					through_hole( 0, brace_holes[0][1],m3_diameter/2,100);
+					through_hole( 0, brace_holes[1][1],m3_diameter/2,100);
+				}
+				translate([-g_thickness*3,g_width,0]) 
 					//cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
 					difference() {
 						hull() {
@@ -118,43 +128,53 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 							through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 						}
 					}
-				translate([-g_thickness*2-g_width/2,-g_width-(g_height - g_hole),-b_thickness/2]) 
+				translate([-2*g_thickness-g_width/2,-g_width-(g_height - g_hole),-b_thickness/2]) rotate([0,-90,0]) 
 					difference() {
 						rotate([90,0,90]) cylinder( r = (g_height - g_hole)/2, h = g_width,$fn = 100 );
 						rotate([0,0,90]) translate([0,-g_width/2,-(g_height - g_hole+1)/2]) cube( [2*(g_height - g_hole)+1, g_width+1, g_height - g_hole+1], center = true);
 						hole(g_width/2,0, m5_diameter/2, 5 );
 					}
 			}
-			translate([2*g_thickness + (b_width/2+(brace_width-b_width)/4),
+			translate([g_thickness + (b_width/2+(brace_width-b_width)/4),
 							0, b_thickness/2]) {
-				cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
-				translate([-g_thickness/2+(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
-					difference() {
-						hull() {
-							cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
-
-							translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
-								cylinder( r = g_thickness/2,h = g_height);
-							translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
-								cylinder( r = g_thickness/2,h = g_height);
-						}
-						union() {
-							translate([0,0,-g_height/2+g_hole/2])
-								cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
-
-							translate([0,g_width/2+g_extra/2,g_height/2+0.1])
-								nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-													m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
-							translate([0,-(g_width/2+g_extra/2),g_height/2+0.1])
-								nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
-													m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
-							translate([-g_thickness/2-0.1,0,g_hole/2])rotate([0,90,0]) {
-								cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
-								cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
+				rotate([0,90,0])  difference() {
+					union() {
+						cube([(brace_width-b_width)/2,brace_height,b_thickness],center=true);
+						translate([-g_thickness/2+(brace_width-b_width)/4,g_offset,g_height/2+b_thickness/2]) 
+							difference() {
+								hull() {
+									cube([g_thickness,g_width + 2*g_extra - g_thickness,g_height],center = true);
+		
+									translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
+										cylinder( r = g_thickness/2,h = g_height);
+									translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
+										cylinder( r = g_thickness/2,h = g_height);
+								}
+								union() {
+									translate([0,0,-g_height/2+g_hole/2])
+										cube([g_thickness+0.1,g_width+0.1,g_hole],center = true);
+		
+									translate([0,g_width/2+g_extra/2,g_height/2+0.1])
+										nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+															m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
+									translate([0,-(g_width/2+g_extra/2),g_height/2+0.1])
+										nut_trap_hole(m3_diameter/2,g_height,g_height*3/4,
+															m3_nut_thickness,m3_nut_diameter/2,-g_thickness);
+									translate([-g_thickness/2-0.1,0,g_hole/2])rotate([0,90,0]) {
+										cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
+										cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
+									}
+								}
 							}
-						}
+						translate([	0, brace_holes[0][1],b_thickness/2])
+							cylinder( r2 = m3_diameter*1.5, r1 = (brace_width-b_width)/4,h = 1);
+						translate([	0, brace_holes[1][1],b_thickness/2])
+							cylinder( r2 = m3_diameter*1.5, r1 = (brace_width-b_width)/4,h = 1);
 					}
-				translate([g_thickness*2,g_width,0]) 
+					through_hole( 0, brace_holes[0][1],m3_diameter/2,100);
+					through_hole( 0, brace_holes[1][1],m3_diameter/2,100);
+				}
+				translate([g_thickness*3,g_width,0]) 
 				//cube([g_thickness,g_width + g_extra*2,b_thickness],center = true);
 					difference() {
 						hull() {
@@ -175,7 +195,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 							through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
 						}
 					}
-				translate([g_thickness*2-g_width/2,-g_width-(g_height - g_hole),-b_thickness/2]) 
+				translate([g_thickness*4-g_width/2,-g_width-(g_height - g_hole),-b_thickness/2])  rotate([0,-90,0])
 					difference() {
 						rotate([90,0,90]) cylinder( r = (g_height - g_hole)/2, h = g_width,$fn = 100 );
 						rotate([0,0,90]) translate([0,-g_width/2,-(g_height - g_hole+1)/2]) cube( [2*(g_height - g_hole)+1, g_width+1, g_height - g_hole+1], center = true);
@@ -187,10 +207,6 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					cylinder( r = m3_diameter*1.5,h = 2);
 			}
 
-			for( i = [0:3] ) {
-				translate([	sign(brace_holes[i][0]) * 2*g_thickness + brace_holes[i][0], brace_holes[i][1],b_thickness])
-					cylinder( r = m3_diameter*1.5,h = 1);
-			}
 		}//union
 		union() {
 			//drill holes to mount the hot end mount and belt clamps
@@ -202,10 +218,6 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 			translate([0,0,h_thickness/2]) for( i = [0:3] ) {
 				through_hole( brace_holes[i][0], brace_holes[i][1],m3_diameter/2,100);
 				hole(	brace_holes[i][0], brace_holes[i][1], m3_nut_diameter/2, 3,6);
-			}
-
-			for( i = [0:3] ) {
-				through_hole( sign(brace_holes[i][0]) * 2*g_thickness + brace_holes[i][0], brace_holes[i][1],m3_diameter/2,100);
 			}
 		}
 	}//difference

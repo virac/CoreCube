@@ -1,7 +1,7 @@
 
 m3_diameter = 3.2;
 m3_nut_diameter = 6.4;
-m3_nut_thickness = 2.2;
+m3_nut_thickness = 2.5;
 m3_tap_diameter = 2.5;
 
 m4_diameter = 4.2;
