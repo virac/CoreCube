@@ -229,13 +229,16 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 											[0,0],
 											[lb_thickness+1,0],
 											[lb_thickness+1,thickness*4]]);
-						translate([lb_diameter/2+thickness/2-1,lb_thickness/2,thickness]) 
-							intersection() {
+								
+					#	translate([lb_diameter/2+thickness/2-1,lb_thickness/2,thickness]) 
+							scale([.8,1,1]) intersection() {
 								rotate([0,45,0])
 									cube([thickness*3,lb_thickness,thickness*3],center = true);
 								cube([thickness*2.5,lb_thickness,thickness*4],center = true);
 							}
 					}
+					translate([-lb_diameter/2-lb_thickness/2-1,-thickness,-thickness*3]) rotate([90,0,180])
+						cylinder( r = m3_diameter/2*3, h = 4, center= true, $fn = 100 );
 				}
 			}// if support
 		} //union
@@ -256,11 +259,11 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 
 		
 		if( support == true && support_hole == true ) {
-			rotate([0,0,lb_rotate])
+	#		rotate([0,0,lb_rotate])
 //			translate([0,lb_thickness/2-lb_diameter+thickness/2,-lb_thickness/2]) 
 				translate([-lb_diameter/2-lb_thickness/2-1,0,-thickness*3]) 
 					rotate([90,0,180])
-						cylinder( r = m3_diameter/2, h = 3*thickness, center= true, $fn = 100 );
+						cylinder( r = m3_diameter/2, h = 4*thickness, center= true, $fn = 100 );
 		}
 	}//difference
 }
