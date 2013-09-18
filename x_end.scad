@@ -12,7 +12,7 @@ linear_bearing_rotate = 0;
 
 holder_gap = 10;
 holder_thickness = 3;
-holder_clasp = 8;
+holder_clasp = 7;
 
 rod_diameter = 10;
 rod_separation = 35;
@@ -27,6 +27,7 @@ dist_from_rod_x = -12.5;
 
 belt_thickness = 1.75;
 linear_bearing_support_structure = false;
+support_offset = 1;
 
 translate ([22,0,0]) 
 	x_end( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
@@ -42,17 +43,17 @@ mirror([1,0,0]) translate ([22,0,0])
 translate([0,1.25*rod_grip,20]) rotate([90,-90,0]){
 		translate([0,0,linear_bearing_thickness/2]) {
 			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
-											holder_gap, holder_thickness,holder_clasp, true );
+											holder_gap, holder_thickness,holder_clasp, true, 0,true, support_offset );
 			if( linear_bearing_support_structure == true )
 				linear_bearing_holder_support( linear_bearing_diameter, linear_bearing_thickness, 
-															holder_gap, holder_thickness,holder_clasp );
+															holder_gap, holder_thickness,holder_clasp, support_offset );
 		}
 		mirror([0,0,1]) translate([0,0,linear_bearing_thickness/2]) {
 			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
-											holder_gap, holder_thickness,holder_clasp, true );
+											holder_gap, holder_thickness,holder_clasp, true, 0,true, support_offset );
 			if( linear_bearing_support_structure == true )
 				linear_bearing_holder_support( linear_bearing_diameter, linear_bearing_thickness, 
-															holder_gap, holder_thickness,holder_clasp );
+															holder_gap, holder_thickness,holder_clasp, support_offset );
 		}
 }
 
@@ -258,7 +259,7 @@ module belt_bearing_support2( thickness, height,additional_height, width ) {
 }
 
 
-module linear_bearing_holder_support( lb_d, lb_t, h_g, h_t,h_c ) {
+module linear_bearing_holder_support( lb_d, lb_t, h_g, h_t,h_c,s_o ) {
 	difference() {
 		translate([0,-lb_d/2.8,-lb_t/2]) rotate([90,0,180])
 			linear_extrude(height = lb_d*3/4) 
@@ -268,7 +269,7 @@ module linear_bearing_holder_support( lb_d, lb_t, h_g, h_t,h_c ) {
 								[lb_t+1,-1],
 								[lb_t+1,lb_t*3/4]]);
 		
-		scale([ 1.03,1.17,1.1])	linear_bearing_holder( lb_d, lb_t, h_g, h_t,h_c,true,0, false );
+		scale([ 1.03,1.17,1.1])	linear_bearing_holder( lb_d, lb_t, h_g, h_t,h_c,true,0, false,s_o );
 	}
 }
 

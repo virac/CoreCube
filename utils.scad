@@ -197,26 +197,26 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 }
 
 
-module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false, lb_rotate = 0, support_hole = true ) {
+module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false, lb_rotate = 0, support_hole = true, support_offset = 0 ) {
 	rotate([0,0,-lb_rotate]) translate([0,0,-0.1]) difference() {
 		union() {
-			hull() {
+			translate([0,0,support_offset]) hull() {
 				cylinder( r = lb_diameter/2 + thickness, h = lb_thickness, center= true, $fn = 100 );
-				translate([lb_diameter/2+thickness,-(gap/2+thickness),-lb_thickness/2]) scale([clasp,gap+thickness*2, lb_thickness]) cube( 1 );
+				translate([lb_diameter/2,-(gap/2+thickness),-lb_thickness/2]) cube( [clasp,gap+thickness*2, lb_thickness] );
 
 
 			}
-			translate([lb_diameter/2+thickness/2,gap/2+thickness,0]) rotate([-90,0,0]) hull() {
+			translate([lb_diameter/2-clasp/2,gap/2+thickness,support_offset]) rotate([-90,0,0]) hull() {
 				cylinder( r = m3_diameter*1.5, h = thickness );
-				translate([clasp/2,0,0]) {
-					scale([m3_diameter*3.3,m3_diameter*6.5,0.1]) cube(1,center=true);
+				translate([clasp,0,0]) {
+					cube([clasp,m3_diameter*6.5,1],center = true);
 					cylinder( r = m3_diameter*1.5, h = thickness );
 				}
 			}
-			translate([lb_diameter/2+thickness/2,-gap/2-thickness,0]) rotate([90,0,0]) hull() {
+			translate([lb_diameter/2-clasp/2,-gap/2-thickness,support_offset]) rotate([90,0,0]) hull() {
 				cylinder( r = m3_diameter*1.5, h = thickness );
-				translate([clasp/2,0,0]) {
-					scale([m3_diameter*3.3,m3_diameter*6.5,0.1]) cube(1,center=true);
+				translate([clasp,0,0]) {
+					scale([clasp,m3_diameter*6.5,0.1]) cube(1,center=true);
 					cylinder( r = m3_diameter*1.5, h = thickness );
 				}
 			}
@@ -224,11 +224,11 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 				rotate([0,0,lb_rotate]){
 					translate([0,lb_thickness/2-lb_diameter+thickness/1.5,-lb_thickness/2]) rotate([90,0,180]) {
 						linear_extrude(height = thickness*2) 
-							polygon([	[lb_thickness/2,lb_thickness],
-											[0,lb_thickness],
+							polygon([	[lb_thickness/2,lb_thickness+support_offset],
+											[0,lb_thickness+support_offset],
 											[0,0],
 											[lb_thickness+1,0],
-											[lb_thickness+1,lb_thickness/2+1]]);
+											[lb_thickness+1,lb_thickness/2+1+support_offset]]);
 								
 						translate([lb_diameter/2+thickness/2-1,lb_thickness/2,thickness]) 
 							scale([.8,1,1]) intersection() {
@@ -246,20 +246,22 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 			}// if support
 		} //union
 
-		cylinder( r = lb_diameter/2, h = lb_thickness+0.1, center= true, $fn = 100 );
+		translate([0,0,support_offset]){
+			cylinder( r = lb_diameter/2, h = lb_thickness+2+2*support_offset+0.1, center= true, $fn = 100 );
 
-		translate([0,-gap/2,-lb_thickness/2-1]) scale([lb_diameter*2,gap, lb_thickness+2]) cube( 1 );
-
+			translate([0,-gap/2,-lb_thickness/2-1])
+				cube( [lb_diameter*2,gap, lb_thickness+2+2*support_offset] );
 		
-		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+thickness,0]) rotate([90,0,0])
-			cylinder( r = m3_diameter/2, h = lb_diameter+2*thickness, $fn = 100 );
+		
+			translate([(lb_diameter+clasp)/2,lb_diameter/2+thickness,0]) rotate([90,0,0])
+				cylinder( r = m3_diameter/2, h = lb_diameter+2*thickness, $fn = 100 );
 
-		translate([(lb_diameter+thickness+clasp)/2,-lb_diameter/2+thickness-2,0]) rotate([90,0,0])
-			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 100 );
+			translate([(lb_diameter+clasp)/2,-lb_diameter/2+thickness-2,0]) rotate([90,0,0])
+				cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 100 );
 
-		translate([(lb_diameter+thickness+clasp)/2,lb_diameter/2+2,0]) rotate([90,90,0])
-			cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
-
+			translate([(lb_diameter+clasp)/2,lb_diameter/2+2,0]) rotate([90,90,0])
+				cylinder( r = m3_nut_diameter/2, h = thickness, $fn = 6 );
+		}
 		
 		if( support == true && support_hole == true ) {
 			rotate([0,0,lb_rotate])
