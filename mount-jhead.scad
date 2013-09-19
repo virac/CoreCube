@@ -116,6 +116,8 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 				}
 				for( i = [0:3] ) {
 					through_hole( mount_holes[i][0], mount_holes[i][1],m3_diameter/2,100);
+					translate([mount_holes[i][0],mount_holes[i][1],b_thickness/2])
+						cylinder( r = m3_diameter*1.5,h = 100);
 				}
 
 			}// union removal section
