@@ -121,7 +121,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						union() {
 							for( i = [-3:3] )
 							{
-								translate([2*i*GT2_2mm_width(),-g_width/2,b_thickness/2]) rotate([-90,0,0])
+								translate([i*(GT2_2mm_spacing()+GT2_2mm_width()),-g_width/2,b_thickness/2]) rotate([-90,0,0])
 									GT2_2mm(g_width);
 							}
 							through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
@@ -188,7 +188,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 						union() {
 							for( i = [-3:3] )
 							{
-								translate([2*i*GT2_2mm_width(),-g_width/2,b_thickness/2]) rotate([-90,0,0])
+								translate([i*(GT2_2mm_spacing()+GT2_2mm_width()),-g_width/2,b_thickness/2]) rotate([-90,0,0])
 									GT2_2mm(g_width);
 							}
 							through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
@@ -222,9 +222,9 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 		}
 	}//difference
 }
-
-function GT2_2mm_width() = 1.494;
 function GT2_2mm_depth() = 0.764;
+function GT2_2mm_width() = 1.494; //width of the tooth
+function GT2_2mm_spacing() = 0.508; //ammount of space on inbetween 2 teeth
 module GT2_2mm(h)
 {
 	linear_extrude(height=h) polygon([[0.747183,-0.5],[0.747183,0],[0.647876,0.037218],[0.598311,0.130528],[0.578556,0.238423],[0.547158,0.343077],[0.504649,0.443762],[0.451556,0.53975],[0.358229,0.636924],[0.2484,0.707276],[0.127259,0.750044],[0,0.76447],[-0.127259,0.750044],[-0.2484,0.707276],[-0.358229,0.636924],[-0.451556,0.53975],[-0.504797,0.443762],[-0.547291,0.343077],[-0.578605,0.238423],[-0.598311,0.130528],[-0.648009,0.037218],[-0.747183,0],[-0.747183,-0.5]]);
