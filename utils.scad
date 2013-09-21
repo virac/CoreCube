@@ -2,6 +2,8 @@
 include <Includes/FreeSerif.scad>
 include <bolts.scad>
 
+function toMMfromIN( in ) = in / 0.039370;
+
 module box(w,h,d) {
 	scale ([w,h,d]) cube(1, true);
 }

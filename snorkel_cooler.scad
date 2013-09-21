@@ -10,27 +10,40 @@ cooler_fin_length = 1.2;
 
 cooler_fin_gap = (cooler_length - (cooler_fin_length * cooler_fin_count))/(cooler_fin_count-1);
 
-snorkel_tube_inner_diameter = 5; //guess so far
-snorkel_tube_grip = 5;
-snorkel_tube_angle = [0,90,0];
+snorkel_tube_inner_diameter = toMMfromIN(3/8);
+snorkel_tube_grip = 20;
+snorkel_tube_angle = [0,-90,0];
+snorkel_cone_size = 5;
 
 snorkel_mount_half( cooler_outer_diameter, cooler_grip_diameter, cooler_length, cooler_thickness,
 				 cooler_fin_count, cooler_fin_length, cooler_fin_gap,
-				 snorkel_tube_inner_diameter, snorkel_tube_grip, snorkel_tube_angle, 100 );
+				 snorkel_tube_inner_diameter, snorkel_tube_grip,
+				 snorkel_tube_angle,snorkel_cone_size, 100 );
 
 
 translate([-cooler_outer_diameter,0,0]) mirror([1,0,0])
 	snorkel_mount_half( cooler_outer_diameter, cooler_grip_diameter, cooler_length, cooler_thickness,
 				 cooler_fin_count, cooler_fin_length, cooler_fin_gap,
-				 snorkel_tube_inner_diameter, snorkel_tube_grip, snorkel_tube_angle, 6 );
+				 snorkel_tube_inner_diameter, snorkel_tube_grip,
+				 snorkel_tube_angle, snorkel_cone_size, 6 );
 
 
 module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
-							st_id, st_g, st_a, mount_faces ) {
+							st_id, st_g, st_a, s_cs, mount_faces ) {
 	difference() {
-		translate([0,0,c_l/2])
-			cube([c_od/2+c_t,c_od+2*c_t,c_l], center = true );
-
+		union() {
+			translate([0,0,c_l/2])
+				cube([c_od/2+c_t,c_od+2*c_t,c_l], center = true );
+			translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
+				cylinder( r1 = c_od/2, r2 = st_id/2,h = s_cs);
+				translate([0,0,s_cs]) cylinder(r = st_id/2,h = st_id/2);
+				translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2,h = st_g);
+				translate([0,0,s_cs]) intersection() {
+					cylinder(r = st_id/2,h = st_id);
+					translate([st_id/2,0,st_id/2]) rotate(st_a) cylinder(r = st_id/2,h = s_cs);
+				}
+			}
+		}
 		union() {
 			translate([-c_od/4-c_t/2,0,-0.1])
 				cylinder( r = c_od/2, h = c_l+0.2 );
