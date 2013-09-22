@@ -42,14 +42,14 @@ mirror([1,0,0]) translate ([22,0,0])
 
 translate([0,1.25*rod_grip,20]) rotate([90,-90,0]){
 		translate([0,0,linear_bearing_thickness/2]) {
-			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
+			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, rod_diameter, rod_thickness,
 											holder_gap, holder_thickness,holder_clasp, true, 0,true, support_offset );
 			if( linear_bearing_support_structure == true )
 				linear_bearing_holder_support( linear_bearing_diameter, linear_bearing_thickness, 
 															holder_gap, holder_thickness,holder_clasp, support_offset );
 		}
 		mirror([0,0,1]) translate([0,0,linear_bearing_thickness/2]) {
-			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, 
+			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness,  rod_diameter, rod_thickness,
 											holder_gap, holder_thickness,holder_clasp, true, 0,true, support_offset );
 			if( linear_bearing_support_structure == true )
 				linear_bearing_holder_support( linear_bearing_diameter, linear_bearing_thickness, 

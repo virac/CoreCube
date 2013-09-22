@@ -199,7 +199,7 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 }
 
 
-module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, support = false, lb_rotate = 0, support_hole = true, support_offset = 0 ) {
+module linear_bearing_holder( lb_diameter, lb_thickness, r_diameter, r_thickness, gap, thickness,clasp, support = false, lb_rotate = 0, support_hole = true, support_offset = 0 ) {
 	rotate([0,0,-lb_rotate]) translate([0,0,-0.1]) difference() {
 		union() {
 			translate([0,0,support_offset]) hull() {
@@ -232,17 +232,21 @@ module linear_bearing_holder( lb_diameter, lb_thickness, gap, thickness,clasp, s
 											[lb_thickness+1,0],
 											[lb_thickness+1,lb_thickness/2+1+support_offset]]);
 								
-						translate([lb_diameter/2+thickness/2-1,lb_thickness/2,thickness]) 
+						translate([lb_diameter/2+thickness/2-1,lb_thickness/2+support_offset/2,thickness]) 
 							scale([.8,1,1]) intersection() {
 								rotate([0,45,0])
-									cube([thickness*3,lb_thickness,thickness*3],center = true);
-								cube([thickness*2.5,lb_thickness,thickness*4],center = true);
+									cube([thickness*3,lb_thickness+support_offset,thickness*3],center = true);
+								cube([thickness*2.5,lb_thickness+support_offset,thickness*4],center = true);
 							}
 					}
-					translate([-lb_diameter/2-lb_thickness/2-1,-thickness,-thickness*3]) rotate([90,0,180]) hull() {
-						cylinder( r = m3_diameter*1.5, h = 4, center= true, $fn = 100 );
-						translate([-m3_diameter/4,0,thickness/2])
-							cube([m3_diameter*3.5,m3_diameter*3.5,thickness], center = true);
+					translate([-lb_thickness-1,thickness,-lb_thickness/2+r_diameter/2+r_thickness])
+						cube([3*r_thickness/2,r_thickness,thickness]);
+					translate([-lb_diameter/2-lb_thickness/2-1,-thickness,-thickness*3]){
+						rotate([90,0,180]) hull() {
+							cylinder( r = m3_diameter*1.5, h = 4, center= true, $fn = 100 );
+							translate([-m3_diameter/4,0.1,thickness/2])
+								cube([m3_diameter*3.5,m3_diameter*3.5,thickness], center = true);
+						}
 					}
 				}
 			}// if support
