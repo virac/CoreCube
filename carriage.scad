@@ -132,7 +132,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					difference() {
 						rotate([90,0,90]) cylinder( r = (g_height - g_hole)/2, h = g_width,$fn = 100 );
 						rotate([0,0,90]) translate([0,-g_width/2,-(g_height - g_hole+1)/2]) cube( [2*(g_height - g_hole)+1, g_width+1, g_height - g_hole+1], center = true);
-						hole(g_width/2,0, m5_diameter/2, 5 );
+						hole(g_width/2,0, m5_diameter/2, 3 );
 					}
 			}
 			translate([g_thickness + (b_width/2+(brace_width-b_width)/4),
@@ -199,7 +199,7 @@ module carriage( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					difference() {
 						rotate([90,0,90]) cylinder( r = (g_height - g_hole)/2, h = g_width,$fn = 100 );
 						rotate([0,0,90]) translate([0,-g_width/2,-(g_height - g_hole+1)/2]) cube( [2*(g_height - g_hole)+1, g_width+1, g_height - g_hole+1], center = true);
-						hole(g_width/2,0, m5_diameter/2, 5 );
+						hole(g_width/2,0, m5_diameter/2, 3 );
 					}
 			}
 			for( i = [0:3] ) {
