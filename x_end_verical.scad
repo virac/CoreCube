@@ -30,12 +30,12 @@ linear_bearing_support_structure = false;
 support_offset = 1;
 
 translate ([22,0,0]) 
-	x_end( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
+	x_end_vert( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
 
 mirror([1,0,0]) translate ([22,0,0]) 
-	x_end( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
+	x_end_vert( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 100 );
 
@@ -57,7 +57,7 @@ translate([0,1.25*rod_grip,20]) rotate([90,-90,0]){
 		}
 }
 
-module x_end( lb_diameter, lb_inner_diameter, lb_thickness, 
+module x_end_vert( lb_diameter, lb_inner_diameter, lb_thickness, 
 					r_diameter, r_separation, r_grip, r_thickness, 
 					gap, h_thickness,clasp, b_diameter, bolt_rez ) {
 	union() {
