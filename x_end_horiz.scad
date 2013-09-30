@@ -28,7 +28,12 @@ assembled = true;
 
 
 translate([0,0,-holder_thickness])
-	x_end_horiz( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
+	x_end_horiz_holder_top( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
+			rod_diameter, rod_separation, rod_grip, rod_thickness, support_offset,
+			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
+
+translate([0,0,-(linear_bearing_diameter/2+holder_thickness + 1)-rod_diameter/2-holder_thickness])
+	x_end_horiz_holder_bottom( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness, support_offset,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
 
@@ -51,38 +56,62 @@ rotate([90*(assembled==true?-1:1),-90*(assembled==true?0:1),90*(assembled==true?
 	}
 }
 
+
 module x_end_horiz( lb_diameter, lb_inner_diameter, lb_thickness, 
 					r_diameter, r_separation, r_grip, r_thickness, s_offset,
-					gap, h_thickness,clasp, b_diameter, bolt_rez ) {
-	union() {
-		difference() {
-			union() {
-					x_end_horiz_holder( lb_diameter, lb_thickness, 
-										r_diameter, r_separation, r_grip, r_thickness,
-										gap, h_thickness,clasp,bolt_rez );
-			} // union
-			union() {
-				translate([0,0,h_thickness]) rotate([0,90,0]){
-					cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness*2+s_offset*4, center= true, $fn = 100 );
-					cylinder( r = lb_diameter/2 + 1, h = (lb_thickness*2+s_offset)*2, center= true, $fn = 100 );
-	}
-			}
-		} // difference
-	}
-}
+					gap, h_thickness,clasp, b_diameter, bolt_rez );
 
 
-module x_end_horiz_holder( lb_diameter, lb_thickness, r_diameter, separation, grip, thickness, gap, h_thickness,clasp, bolt_rez ) {
+module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness, 
+									r_diameter, separation, grip, thickness, s_offset,
+									gap, h_thickness,clasp,b_diameter, bolt_rez ) {
 	add_additional = false;
 	translate([0,0,0]) difference() {
 		union() {
-			translate([0,-grip/2,-(lb_diameter/2+r_diameter/2+thickness)/2]) 
+			translate([0,-grip/2+thickness/2,-((lb_diameter/2+h_thickness + 1)+r_diameter/2)/2]) 
 				cube([lb_diameter + separation + r_diameter + thickness*2 - h_thickness,
-						grip,
-						lb_diameter/2 + r_diameter/2+thickness],center = true);
-			
+						grip+ thickness,
+						(lb_diameter/2+h_thickness + 1)+r_diameter/2],center = true);
+			translate([0,-grip-5,-2]) {
+				cube([20,10,4],center = true);
+			}
 		}// union
-	}
+		union() { //sub area
+			translate([0,0,-(lb_diameter/2+h_thickness + 1)-r_diameter/2]) {
+				translate([separation/2,0,0]) rotate([90,0,0])
+					cylinder(r= r_diameter/2, h = grip+0.1 );
+				translate([-separation/2,0,0]) rotate([90,0,0])
+					cylinder(r= r_diameter/2, h = grip+0.1 );
+			}
+			translate([0,0,h_thickness]) rotate([0,90,0]){
+				cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness*2+s_offset*4, center= true, $fn = 100 );
+				cylinder( r = lb_diameter/2 + 1, h = (lb_thickness*2+s_offset)*2, center= true, $fn = 100 );
+			}
+//-lb_thickness/2+r_diameter/2+r_thickness =-29/2+10/2+5
+			translate([9.9,-lb_thickness-1.1,-thickness])
+				cube([h_thickness,3*thickness/2+0.1,thickness+0.1]);
+			translate([-9.9-h_thickness,-lb_thickness-1.1,-thickness])
+				cube([h_thickness,3*thickness/2+0.1,thickness+0.1]);
+		}//union sub area
+	}//difference
 }
 
+module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness, 
+									r_diameter, separation, grip, thickness, s_offset,
+									gap, h_thickness,clasp,b_diameter, bolt_rez ) {
+	translate([0,0,0]) difference() {
+		union() {			
+			translate([0,-grip/2+thickness/2,-thickness/2 -r_diameter/4]) 
+				cube([lb_diameter + separation + r_diameter + thickness*2 - h_thickness,
+						grip+ thickness,
+						thickness +r_diameter/2],center = true);
+		}// union
+		union() { //sub area
+			translate([separation/2,0,0]) rotate([90,0,0])
+				cylinder(r= r_diameter/2, h = grip+0.1 );
+			translate([-separation/2,0,0]) rotate([90,0,0])
+				cylinder(r= r_diameter/2, h = grip+0.1 );
+		}//union sub area
+	}//difference
+}
 
