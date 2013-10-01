@@ -73,7 +73,19 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 						grip+ thickness,
 						(lb_diameter/2+h_thickness + 1)+r_diameter/2],center = true);
 			translate([0,-grip-5,-2]) {
-				cube([20,10,4],center = true);
+				cube([19.8,10,4],center = true);
+				translate([9.9-3,-5,-4]) rotate([0,90,0]) linear_extrude( height = 3) 
+					polygon([[-2,10],
+								[-2,0],
+								[10,10]]);
+				translate([-3/2,-5,-4]) rotate([0,90,0]) linear_extrude( height = 3) 
+					polygon([[-2,10],
+								[-2,0],
+								[10,10]]);
+				translate([-9.9,-5,-4]) rotate([0,90,0]) linear_extrude( height = 3) 
+					polygon([[-2,10],
+								[-2,0],
+								[10,10]]);
 			}
 		}// union
 		union() { //sub area
