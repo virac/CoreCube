@@ -1,4 +1,9 @@
 
+m2_diameter = 2.2;
+m2_nut_diameter = 9999;
+m2_nut_thickness = 1.7;
+m2_tap_diameter = 9999;
+
 m3_diameter = 3.2;
 m3_nut_diameter = 6.4;
 m3_nut_thickness = 2.5;
