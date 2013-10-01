@@ -99,6 +99,10 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 				cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness*2+s_offset*4, center= true, $fn = 100 );
 				cylinder( r = lb_diameter/2 + 1, h = (lb_thickness*2+s_offset)*2, center= true, $fn = 100 );
 			}
+			translate([4.5,-grip-5,0.1]) rotate([180,0,0])
+				cylinder( r = m2_diameter/2, h = 3.9, $fn = 100 );
+			translate([-4.5,-grip-5,0.1]) rotate([180,0,0])
+				cylinder( r = m2_diameter/2, h = 3.9, $fn = 100 );
 //-lb_thickness/2+r_diameter/2+r_thickness =-29/2+10/2+5
 			translate([9.9,-lb_thickness-1.1,-thickness])
 				cube([h_thickness,3*thickness/2+0.1,thickness+0.1]);
