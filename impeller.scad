@@ -35,17 +35,17 @@ module impeller(base_d, base_t,
 	difference() {
 		union() {
 			cylinder( r = base_d/2, h = base_t );
-			for( i = [base_t-step:step:hub_h-step] ) {
+			for( i = [base_t-step:step:hub_h] ) {
 				translate([0,0,i]) hull() {
 					cylinder( r1 = hub_parabolic(i,step,base_t,hub_od,hub_h,base_d),
 								r2 = hub_parabolic(i+step,step,base_t,hub_od,hub_h,base_d), h = step );	
 				}
 			}
 			union() {
-				translate([0,0,hub_h*.475]) 
+				translate([0,0,hub_h*.475])
 					fins( base_d*0.375, base_d * 0.5,fin_t, base_t, hub_h*.95,fin_cL, 0);
 	
-				translate([0,0,hub_h*.25]) 
+				translate([0,0,hub_h*.25])
 					fins( base_d*0.375, base_d * 0.5,fin_t, base_t, hub_h * 0.55,fin_cS, 245/fin_cL);
 			}
 		}
@@ -72,19 +72,25 @@ module fin( radius, base_radius, thickness, height, angle ) {
 		translate([0,0,-height/2]) cylinder( r = base_radius, h = height );
 	}
 }
-
+use_extrude = true;
 module fin2(radius, base_radius, thickness, height, angle) {
+	rot = 10;
 	rotate([0,0,angle])
-	rotate([90,0,90]) 
-	linear_extrude(height=base_radius, center=false, convexity=5, twist=-60, slices=15)
-		scale([thickness/height,1,1]) circle(r = height*.7);
+	rotate([90,0,90]) translate([5,0,0]) 
+	rotate([0,0,rot])
+	if( use_extrude == true ){
+		linear_extrude(height=base_radius, center=false, convexity=5, twist=-45, slices=5)
+			scale([thickness/height,1,1]) circle(r = height*.7);		
+	} else {
+		scale([thickness/height,1,1]) cylinder(r = height/2, h = base_radius);		
+	}
 }
 
 module fins( radius, base_radius, thickness, base_t, height, count, offset ){
 	intersection() {
-		union() {
-			for( i = [0:count] ) {
-		//		fin2( radius, base_radius, thickness, height, 360*i/count+offset );
+		translate([0,0,base_t]) union() {
+			for( i = [1:count] ) {
+				fin2( radius, base_radius, thickness, height, 360*(i-1)/count+offset );
 			}
 		}
 		translate([0,0,base_t-height/2]) intersection() {
