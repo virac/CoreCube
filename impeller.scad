@@ -46,7 +46,7 @@ module impeller(base_d, base_t,
 					fins( base_d*0.375, base_d * 0.5,fin_t, base_t, hub_h*.95,fin_cL, 0);
 	
 				translate([0,0,hub_h*.25])
-					fins( base_d*0.375, base_d * 0.5,fin_t, base_t, hub_h * 0.55,fin_cS, 245/fin_cL);
+					fins( base_d*0.375, base_d * 0.5,fin_t, base_t, hub_h * 0.55,fin_cS, 285/fin_cL);
 			}
 		}
 		
@@ -72,15 +72,20 @@ module fin( radius, base_radius, thickness, height, angle ) {
 		translate([0,0,-height/2]) cylinder( r = base_radius, h = height );
 	}
 }
-use_extrude = true;
+
+extrude_type = 1;
 module fin2(radius, base_radius, thickness, height, angle) {
 	rot = 10;
 	rotate([0,0,angle])
 	rotate([90,0,90]) translate([5,0,0]) 
 	rotate([0,0,rot])
-	if( use_extrude == true ){
-		linear_extrude(height=base_radius, center=false, convexity=5, twist=-45, slices=5)
-			scale([thickness/height,1,1]) circle(r = height*.7);		
+	if( extrude_type > 0 ){
+			if(extrude_type==1) 
+				linear_extrude(height=base_radius, center=false, twist=-45, slices=15, $fn = 40)
+					scale([thickness/height,1,1]) circle(r = height*.7);
+			if(extrude_type==2) 
+				translate([0,-height/2,0]) linear_extrude(height=base_radius, center=false, twist=-45, slices=25, $fn = 60)
+					square([1,height]);
 	} else {
 		scale([thickness/height,1,1]) cylinder(r = height/2, h = base_radius);		
 	}
