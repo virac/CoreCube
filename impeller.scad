@@ -18,7 +18,7 @@ $fn = 100;
 
 impeller(base_diameter, base_thickness, 
 			hub_outer_diameter_upper, hub_height, hub_inner_diameter,
-			hub_motor_diameter+12, hub_shaft_length, hub_motor_length,
+			hub_motor_diameter+2, hub_shaft_length, hub_motor_length,
 			fin_count_large, fin_count_small, fin_thickness);
 
 translate([base_diameter+ 4*base_thickness+10,0,0]) 
@@ -31,7 +31,7 @@ module impeller(base_d, base_t,
 						hub_od, hub_h, hub_id,
 						hub_md, hub_sl, hub_ml,
 						fin_cL, fin_cS, fin_t ) {
-	step = 2;
+step = 2;
 	difference() {
 		union() {
 			cylinder( r = base_d/2, h = base_t );
@@ -58,6 +58,11 @@ module impeller(base_d, base_t,
 function parabolic( i ) = log(1/i)/1.5;
 function hub_parabolic( cur, step, minh, mind, maxh, maxd ) =  min(parabolic(zero_to_one(cur,minh-step,maxh))*
 																						(maxd-mind)/2+mind/2, maxd/2);
+
+function parabolic2( i ) = ln(i*.1+1)+1;
+function fin_parabolic( cur, step, minh, mind, maxh, maxd ) =  min(parabolic2(zero_to_one(cur,minh-step,maxh))*
+																						(maxd-mind)/2+mind/2, maxd/2);
+
 function zero_to_one( i, mins, maxs ) = (i-mins)/(maxs-mins);
 
 module fin( radius, base_radius, thickness, height, angle ) {
@@ -92,6 +97,7 @@ module fin2(radius, base_radius, thickness, height, angle) {
 }
 
 module fins( radius, base_radius, thickness, base_t, height, count, offset ){
+step = 2;
 	intersection() {
 		translate([0,0,base_t]) union() {
 			for( i = [1:count] ) {
@@ -101,6 +107,12 @@ module fins( radius, base_radius, thickness, base_t, height, count, offset ){
 		translate([0,0,base_t-height/2]) intersection() {
 			scale([1,1,height/base_radius]) sphere( r = base_radius );
 			cylinder( r = base_radius, h = height );
+			/*for( i = [0:step:height-base_t] ) {
+				translate([0,0,i]) hull() {
+		#			cylinder(r1 = fin_parabolic(     i,step,base_t,5,height,base_radius*2),
+								r2 = fin_parabolic(step+i,step,base_t,5,height,base_radius*2), h = step );	
+				}
+			}*/
 		}
 		
 	}
