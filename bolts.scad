@@ -15,6 +15,7 @@ m4_nut_thickness = 2.5;
 m4_tap_diameter = 3.4;
 
 m5_diameter = 5.2;
+m5_cap_length = 5;
 m5_nut_diameter = 9.4;
 m5_nut_thickness = 2.7;
 m5_tap_diameter = 4.3;
