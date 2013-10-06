@@ -193,7 +193,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 				rotate([180,0,0]) 
 					cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 				translate([0,0,-0.1])
-					cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
+					cylinder( r = m5_diameter/2, h = 10, $fn = 40 );
 			}
 			translate([separation/2+r_diameter/2+thickness,0,0]) rotate( [180,0,0] ) {
 				translate([0,lb_diameter+2,0]) {
@@ -206,7 +206,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 					rotate([180,0,0]) 
 						cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 					translate([0,0,-0.1])
-						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
+						cylinder( r = m5_diameter/2, h = 10, $fn = 40 );
 				}
 			}
 			translate([-(separation/2+r_diameter/2+thickness),0,0]) rotate( [180,0,0] ) {
@@ -220,7 +220,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 					rotate([180,0,0]) 
 						cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 					translate([0,0,-0.1])
-						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
+						cylinder( r = m5_diameter/2, h = 10, $fn = 40 );
 				}
 			}
 
@@ -252,7 +252,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 				translate([0,-3,-0.1]){
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
+						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
@@ -266,7 +266,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 				translate([0,-3,-0.1]){
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
+						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
@@ -278,7 +278,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 				translate([0,-3,-0.1]){
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
+						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
