@@ -111,6 +111,7 @@ module non_braced_5_hole_L_bracket( width, length, thickness ) {
 }
 
 module belt_bearing_support( thickness, height,additional_height, width ) {
+bearing_thickness = 10.05;
 	difference() {
 		union() {
 			difference() {
@@ -119,7 +120,7 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 								[0,-thickness-(height+additional_height)/1.5],
 								[-height,-thickness] ] );
 					
-				rotate([90,0,0])translate([-width/2,height,0]) hole( 0,0,bearing_inner_diameter/1.01,100);
+				rotate([90,0,0])translate([-width/2,height,0]) hole( 0,0,additional_height/1.01,100);
 			}
 
 			hull(){
@@ -187,7 +188,7 @@ module belt_bearing_support( thickness, height,additional_height, width ) {
 
 		}
 		rotate( [90,0,0] ) translate([ -width/2, height, 0])
-			through_hole( 0,0,bearing_inner_diameter/2,100);
+			through_hole( 0,0,additional_height/2,100);
 
 	//	#	translate([0,15,-.1]) rotate([0,90,180]) translate([0,0,-3]) 
 	//						linear_extrude(height = 3)
