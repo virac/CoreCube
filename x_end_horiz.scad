@@ -81,6 +81,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 	top_width = 2*(m5_diameter*1.5) + separation + r_diameter + thickness*2;
 	top_length= grip+ thickness;
 	top_height= (lb_diameter/2+h_thickness + 1)+r_diameter/2;
+	belt_position = belt_thickness+ b_diameter+dist_from_rod_x;
 	translate([0,0,0]) difference() {
 		union() {
 			translate([0,-top_length/2+thickness,-(top_height)/2]) 
@@ -196,11 +197,11 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 				translate([0,0,((lb_diameter/2+h_thickness + 1)+r_diameter/2)/2])
 					cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 			}
-			translate(-[0,3,lb_diameter/2+1+m5_diameter]) rotate( [180,0,0] ) {
+			#translate(-[0,belt_position,lb_diameter/2+1+m5_diameter]) rotate( [180,0,0] ) {
 				rotate([180,0,0]) 
 					cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 				translate([0,0,-0.1])
-					cylinder( r = m5_diameter/2, h = 10, $fn = 40 );
+					cylinder( r = m5_diameter/2, h = 30, $fn = 40 );
 			}
 			translate([separation/2+r_diameter/2+thickness,0,0]) rotate( [180,0,0] ) {
 				translate([0,lb_diameter+2,0]) {
@@ -209,7 +210,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([0,0,((lb_diameter/2+h_thickness + 1)+r_diameter/2)/2])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
-				translate([0,3,lb_diameter/2+1+m5_diameter]) {
+				translate([0,belt_position,lb_diameter/2+1+m5_diameter]) {
 					rotate([180,0,0]) 
 						cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 					translate([0,0,-0.1])
@@ -223,11 +224,11 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([0,0,((lb_diameter/2+h_thickness + 1)+r_diameter/2)/2])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
-				translate([0,3,lb_diameter/2+1+m5_diameter]) {
+			#	translate([0,belt_position,lb_diameter/2+1+m5_diameter]) {
 					rotate([180,0,0]) 
 						cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 					translate([0,0,-0.1])
-						cylinder( r = m5_diameter/2, h = 10, $fn = 40 );
+						cylinder( r = m5_diameter/2, h = 30, $fn = 40 );
 				}
 			}
 
@@ -243,6 +244,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 	bottom_length= grip+ thickness;
 	bottom_height= thickness+r_diameter/2;
 	top_height= (lb_diameter/2+h_thickness + 1)+r_diameter/2;
+	belt_position = belt_thickness+ b_diameter+dist_from_rod_x;
 	translate([0,0,0]) difference() {
 		union() {			
 			translate([0,-bottom_length/2+thickness,-bottom_height/2]) 
@@ -267,7 +269,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
-				translate([0,-3,-0.1]){
+				translate([0,-belt_position,-0.1]){
 						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
@@ -280,7 +282,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
-				translate([0,-3,-0.1]){
+				translate([0,-belt_position,-0.1]){
 						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
@@ -292,7 +294,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
-				translate([0,-3,-0.1]){
+				translate([0,-belt_position,-0.1]){
 						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
