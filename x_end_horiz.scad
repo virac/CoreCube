@@ -250,10 +250,32 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 			translate([0,-bottom_length/2+thickness,-bottom_height/2]) 
 				cube([bottom_width, bottom_length, bottom_height],center = true);
 			rotate([90,0,-90]) 
-				translate([	belt_thickness+ b_diameter+dist_from_rod_x,
+				translate([	belt_position,
 								dist_from_rod_y+top_height+h_thickness,
 								bottom_width/2-0.1]) mirror([0,1,0])
 					belt_bearing_support_cap_side( thickness,
+													bearing_diameter/2 +3,
+													bearing_inner_diameter ,8, thickness/2.2 );
+
+			rotate([90,0,-90]) 
+
+			translate([	belt_position,
+							dist_from_rod_y+top_height+h_thickness-bearing_thickness,
+							(bottom_width/2-0.1+bearing_diameter/2+3)/2])
+					cube([bearing_diameter,thickness*2,(bottom_width/2-(bearing_diameter/2+3))],center = true );
+
+			rotate([90,0,-90]) 
+				translate([	belt_position,
+								dist_from_rod_y+top_height+h_thickness,
+								bottom_width/2-0.1]) mirror([0,1,0])
+					belt_bearing_support_nut_side( thickness/3,
+													bearing_diameter/2 +3,
+													bearing_inner_diameter ,8, thickness/2.2 );
+			rotate([90,0,-90]) 
+				translate([	belt_position,
+								dist_from_rod_y+top_height+h_thickness,
+								bearing_diameter/2+3]) mirror([0,1,0])rotate([0,180,0])
+					belt_bearing_support_nut_side( thickness/3,
 													bearing_diameter/2 +3,
 													bearing_inner_diameter ,8, thickness/2.2 );
 		}// union
@@ -310,6 +332,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 
 module belt_bearing_support_nut_side( thickness, height,additional_height, width ) {
 show_other = false;
+show_bearing = true;
 	translate([width/2,-7.5,0]) difference() {
 		union() {
 			if( show_other == true ) {
@@ -389,6 +412,9 @@ show_other = false;
 		rotate( [90,0,0] ) translate([ -width/2, height, 0])
 			through_hole( 0,0,bearing_inner_diameter/2,100);
 	}
+	if( show_bearing == true )
+		rotate([90,0,0]) translate([ 0, height, -bearing_thickness/2]) color( [0.4,.4,.8] )
+			cylinder( r =bearing_diameter/2,h = bearing_thickness);
 }
 
 
