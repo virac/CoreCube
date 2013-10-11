@@ -25,17 +25,20 @@ dist_from_rod_x = -12.5;
 
 belt_thickness = 1.75;
 linear_bearing_support_structure = false;
-support_offset = 10;
+support_offset = 1;
 
 x_limit_switch = true;
 y1_limit_switch = false;
 y2_limit_switch = false;
 
+belt_grab1 = false;
+belt_grab2 = true;
 
-assembled = true;
+assembled = false;
 
 show_lb = true;
 show_bottom = true;
+show_belt_grab = true;
 
 translate([-(assembled==true?0:1)*2*rod_separation,0,-holder_thickness])
 	x_end_horiz_holder_top( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
@@ -66,6 +69,14 @@ rotate([90*(assembled==true?-1:1),-90*(assembled==true?0:1),90*(assembled==true?
 	}
 }
 
+if( show_belt_grab == true ) {
+	translate([(assembled==true?0:1)*2*rod_separation,
+					(assembled==true?0:1)*-20,
+					(assembled==true?1:0)*(-(linear_bearing_diameter/2+holder_thickness + 1)-rod_diameter/2-holder_thickness)]) 
+		x_end_horiz_belt_grab( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
+				rod_diameter, rod_separation, rod_grip, rod_thickness, support_offset,
+				holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
+}	
 
 module x_end_horiz( lb_diameter, lb_inner_diameter, lb_thickness, 
 					r_diameter, r_separation, r_grip, r_thickness, s_offset,
@@ -197,7 +208,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 				translate([0,0,((lb_diameter/2+h_thickness + 1)+r_diameter/2)/2])
 					cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 			}
-			#translate(-[0,belt_position,lb_diameter/2+1+m5_diameter]) rotate( [180,0,0] ) {
+			translate(-[0,belt_position,lb_diameter/2+1+m5_diameter]) rotate( [180,0,0] ) {
 				rotate([180,0,0]) 
 					cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 				translate([0,0,-0.1])
@@ -224,7 +235,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([0,0,((lb_diameter/2+h_thickness + 1)+r_diameter/2)/2])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
-			#	translate([0,belt_position,lb_diameter/2+1+m5_diameter]) {
+				translate([0,belt_position,lb_diameter/2+1+m5_diameter]) {
 					rotate([180,0,0]) 
 						cylinder( r = m5_diameter, h = lb_diameter/2+1+m5_diameter, $fn = 40 );
 					translate([0,0,-0.1])
@@ -236,8 +247,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 		}//union sub area
 	}//difference
 }
-
-module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness, 
+module x_end_horiz_belt_grab(lb_diameter,lb_inner_diameter, lb_thickness, 
 									r_diameter, separation, grip, thickness, s_offset,
 									gap, h_thickness,clasp,b_diameter, bolt_rez ) {
 	bottom_width = 2*(m5_diameter*1.5) + separation + r_diameter + thickness*2;
@@ -245,25 +255,14 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 	bottom_height= thickness+r_diameter/2;
 	top_height= (lb_diameter/2+h_thickness + 1)+r_diameter/2;
 	belt_position = belt_thickness+ b_diameter+dist_from_rod_x;
-	translate([0,0,0]) difference() {
-		union() {			
-			translate([0,-bottom_length/2+thickness,-bottom_height/2]) 
-				cube([bottom_width, bottom_length, bottom_height],center = true);
+	difference() { 
+		union() { //add area
 			rotate([90,0,-90]) 
 				translate([	belt_position,
-								dist_from_rod_y+top_height+h_thickness,
-								bottom_width/2-0.1]) mirror([0,1,0])
-					belt_bearing_support_cap_side( thickness,
-													bearing_diameter/2 +3,
-													bearing_inner_diameter ,8, thickness/2.2 );
-
-			rotate([90,0,-90]) 
-
-			translate([	belt_position,
-							dist_from_rod_y+top_height+h_thickness-bearing_thickness,
+							dist_from_rod_y+top_height+h_thickness-bearing_thickness+2.4,
 							(bottom_width/2-0.1+bearing_diameter/2+3)/2])
-					cube([bearing_diameter,thickness*2,(bottom_width/2-(bearing_diameter/2+3))],center = true );
-
+					cube([bearing_diameter,thickness*5,(bottom_width/2-(bearing_diameter/2+3))],center = true );
+	
 			rotate([90,0,-90]) 
 				translate([	belt_position,
 								dist_from_rod_y+top_height+h_thickness,
@@ -278,6 +277,53 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 					belt_bearing_support_nut_side( thickness/3,
 													bearing_diameter/2 +3,
 													bearing_inner_diameter ,8, thickness/2.2 );
+			translate(-[separation/2+r_diameter/2+thickness,belt_position,0.1+bottom_height])
+				cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
+		}//union add area
+		union() {//sub area
+			
+			translate(-[separation/2+r_diameter/2+thickness,
+							belt_position,
+							-(dist_from_rod_y+top_height+h_thickness-bearing_thickness)]) {
+				rotate([180,0,0]) 
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*4+0.1, $fn = 6 );
+				translate([0,0,-20])
+					cylinder( r = m5_diameter/2, h = 60, $fn = 40 );
+			}
+		}//union sub area
+	}
+}
+module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness, 
+									r_diameter, separation, grip, thickness, s_offset,
+									gap, h_thickness,clasp,b_diameter, bolt_rez ) {
+	bottom_width = 2*(m5_diameter*1.5) + separation + r_diameter + thickness*2;
+	bottom_length= grip+ thickness;
+	bottom_height= thickness+r_diameter/2;
+	top_height= (lb_diameter/2+h_thickness + 1)+r_diameter/2;
+	belt_position = belt_thickness+ b_diameter+dist_from_rod_x;
+
+	translate([0,0,0]) difference() {
+		union() {			
+			translate([0,-bottom_length/2+thickness,-bottom_height/2]) 
+				cube([bottom_width, bottom_length, bottom_height],center = true);
+			if( belt_grab1 == true ) {
+				rotate([90,0,-90]) 
+					translate([	belt_position,
+									dist_from_rod_y+top_height+h_thickness,
+									-bottom_width/2-0.1]) mirror([0,1,0]) rotate([0,180,0])
+						belt_bearing_support_cap_side( thickness,
+														bearing_diameter/2 +3,
+														bearing_inner_diameter ,8, thickness/2.2 );
+			}
+			if( belt_grab2 == true ) {
+				rotate([90,0,-90]) 
+					translate([	belt_position,
+									dist_from_rod_y+top_height+h_thickness,
+									bottom_width/2-0.1]) mirror([0,1,0])
+						belt_bearing_support_cap_side( thickness,
+														bearing_diameter/2 +3,
+														bearing_inner_diameter ,8, thickness/2.2 );
+			}
 		}// union
 		union() { //sub area
 			translate([separation/2,0,0]) rotate([90,0,0])
@@ -287,37 +333,37 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 
 			translate(-[0,0,bottom_height]) {
 				translate([0,-lb_diameter+1,-0.1]) { //middle hole
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 				translate([0,-belt_position,-0.1]){
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 			}
 
 			translate(-[separation/2+r_diameter/2+thickness,0,bottom_height]) {
-				translate([0,-lb_diameter-2,-0.1]) { //middle hole
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
+				translate([0,-lb_diameter-2,-0.1]) {
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 				translate([0,-belt_position,-0.1]){
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 			}
 			translate(-[-(separation/2+r_diameter/2+thickness),0,bottom_height]) {
-				translate([0,-lb_diameter-2,-0.1]) { //middle hole
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
+				translate([0,-lb_diameter-2,-0.1]) {
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
 				translate([0,-belt_position,-0.1]){
-						cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
+					cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 					translate([0,0,m5_nut_thickness])
 						cylinder( r = m5_diameter/2, h = 20, $fn = 40 );
 				}
