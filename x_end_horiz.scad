@@ -378,7 +378,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 
 module belt_bearing_support_nut_side( thickness, height,additional_height, width ) {
 show_other = false;
-show_bearing = true;
+show_bearing = false;
 	translate([width/2,-7.5,0]) difference() {
 		union() {
 			if( show_other == true ) {
