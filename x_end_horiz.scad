@@ -31,8 +31,8 @@ x_limit_switch = true;
 y1_limit_switch = false;
 y2_limit_switch = false;
 
-belt_grab1 = false;
-belt_grab2 = true;
+belt_grab1 = true;
+belt_grab2 = false;
 
 assembled = false;
 
@@ -267,16 +267,16 @@ module x_end_horiz_belt_grab(lb_diameter,lb_inner_diameter, lb_thickness,
 				translate([	belt_position,
 								dist_from_rod_y+top_height+h_thickness,
 								bottom_width/2-0.1]) mirror([0,1,0])
-					belt_bearing_support_nut_side( thickness/3,
+					belt_bearing_support_side( thickness/3,
 													bearing_diameter/2 +3,
-													bearing_inner_diameter ,8, thickness/2.2 );
+													bearing_inner_diameter ,8, thickness/2.2,true,false  );
 			rotate([90,0,-90]) 
 				translate([	belt_position,
 								dist_from_rod_y+top_height+h_thickness,
 								bearing_diameter/2+3]) mirror([0,1,0])rotate([0,180,0])
-					belt_bearing_support_nut_side( thickness/3,
+					belt_bearing_support_side( thickness/3,
 													bearing_diameter/2 +3,
-													bearing_inner_diameter ,8, thickness/2.2 );
+													bearing_inner_diameter ,8, thickness/2.2,true,false );
 			translate(-[separation/2+r_diameter/2+thickness,belt_position,0.1+bottom_height])
 				cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness*2+0.1, $fn = 6 );
 		}//union add area
@@ -311,18 +311,18 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 					translate([	belt_position,
 									dist_from_rod_y+top_height+h_thickness,
 									-bottom_width/2-0.1]) mirror([0,1,0]) rotate([0,180,0])
-						belt_bearing_support_cap_side( thickness,
+						belt_bearing_support_side( thickness,
 														bearing_diameter/2 +3,
-														bearing_inner_diameter ,8, thickness/2.2 );
+														bearing_inner_diameter ,8, thickness/2.2,true,true );
 			}
 			if( belt_grab2 == true ) {
 				rotate([90,0,-90]) 
 					translate([	belt_position,
 									dist_from_rod_y+top_height+h_thickness,
 									bottom_width/2-0.1]) mirror([0,1,0])
-						belt_bearing_support_cap_side( thickness,
+						belt_bearing_support_side( thickness,
 														bearing_diameter/2 +3,
-														bearing_inner_diameter ,8, thickness/2.2 );
+														bearing_inner_diameter ,8, thickness/2.2,false,true );
 			}
 		}// union
 		union() { //sub area
@@ -376,12 +376,11 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 
 
 
-module belt_bearing_support_nut_side( thickness, height,additional_height, width ) {
-show_other = false;
+module belt_bearing_support_side( thickness, height,additional_height, width, show_nut_side, show_cap_side ) {
 show_bearing = false;
 	translate([width/2,-7.5,0]) difference() {
 		union() {
-			if( show_other == true ) {
+			if( show_cap_side == true ) { echo("here");
 				difference() {
 					rotate([0,90,0]) mirror([0,0,1]) linear_extrude(height = width)
 						polygon([[0,-thickness], 
@@ -415,96 +414,7 @@ show_bearing = false;
 									[0,-thickness-(15-bearing_thickness)/2],
 									[(-height-additional_height)/2,-thickness] ] );
 			}
-			
-			difference(){
-				hull() {
-					translate([-width/2,15+thickness/2,(height+additional_height)/2]) 
-						scale([8,thickness,height+additional_height]) 
-							cube( 1, center= true );
-
-					rotate([90,0,0]) mirror([0,0,1]) translate([-width/2,height,(15+bearing_thickness)/2]) 
-						cylinder( h = (15-bearing_thickness)/2, r = width/2);
-
-					rotate([0,90,0]) mirror([0,0,1]) translate([0,thickness+(15+bearing_thickness)/2,0]) 
-						linear_extrude(height = width)
-						polygon([[0,-thickness+(15-bearing_thickness)/2], 
-									[-height-additional_height,-thickness+(15-bearing_thickness)/2],
-									[-height,-thickness] ] );
-
-					translate([0,15,0]) rotate([0,90,180]) translate([0,0,-3]) 
-						linear_extrude(height = width+6)
-						polygon([[0,-thickness], 
-									[0,-thickness-(height+additional_height)*4/6],
-									[-height-additional_height,-thickness-4],
-									[-height-additional_height,-thickness] ] );
-				
-				}
-			
-				
-				rotate([0,90,180]) rotate([90,0,0])translate([-height,width/2,thickness+15]) 
-					hull() {
-						cylinder(r=4.7,h=3,$fn=6);
-						translate([-10,0,0])
-							cylinder(r=4.7,h=3,$fn=6);
-					}
-			}
-			rotate([0,90,0]) mirror([0,0,1]) translate([0,thickness+(15+bearing_thickness)/2,0]) 
-				linear_extrude(height = width)
-				polygon([[0,-thickness+(15-bearing_thickness)/2], 
-									[-height-additional_height,-thickness+(15-bearing_thickness)/2],
-									[0,-thickness] ] );
-
-		}
-		rotate( [90,0,0] ) translate([ -width/2, height, 0])
-			through_hole( 0,0,bearing_inner_diameter/2,100);
-	}
-	if( show_bearing == true )
-		rotate([90,0,0]) translate([ 0, height, -bearing_thickness/2]) color( [0.4,.4,.8] )
-			cylinder( r =bearing_diameter/2,h = bearing_thickness);
-}
-
-
-
-module belt_bearing_support_cap_side( thickness, height,additional_height, width, back ) {
-show_other = false;
-show_bearing = false;
-	translate([width/2,-7.5,0]) difference() {
-		union() {
-			difference() {
-				rotate([0,90,0]) mirror([0,0,1]) linear_extrude(height = width)
-					polygon([[0,-thickness], 
-								[0,-thickness-back],
-								[-height,-thickness] ] );
-					
-				rotate([90,0,0])translate([-width/2,height,0]) hole( 0,0,bearing_inner_diameter/1.01,100);
-			}
-
-			hull(){
-				translate([-width/2,-thickness/2,(height+additional_height)/2]) 
-					scale([width,thickness,height+additional_height]) 	
-						cube( 1, center= true );
-				translate([-width/2,-thickness/2,(height-additional_height)/2-0.1]) 
-					scale([width*1.75,thickness,height-additional_height]) 	
-						cube( 1, center= true );
-
-				rotate([90,0,0]) translate([-width/2,height,thickness/2]) 
-					cylinder( h = (15-bearing_thickness)/2, r = width*3/4);
-
-				rotate([90,0,0]) translate([-width/2,height,-(15-bearing_thickness)/2]) 
-					cylinder( h = (15-bearing_thickness)/2, r = width/2);
-
-				rotate([0,90,180]) translate([0,thickness,0]) linear_extrude(height = width)
-					polygon([[0,-thickness], 
-									[-height,-thickness-(15-bearing_thickness)/2],
-									[-height-additional_height,-thickness] ] );
-			}
-			rotate([0,90,180]) translate([0,thickness,0]) linear_extrude(height = width)
-					polygon([[0,-thickness], 
-								[0,-thickness-(15-bearing_thickness)/2],
-								[(-height-additional_height)/2,-thickness] ] );
-			
-			
-			if( show_other == true ) {
+			if( show_cap_side == true ) {
 				difference(){
 					hull() {
 						translate([-width/2,15+thickness/2,(height+additional_height)/2]) 
@@ -542,8 +452,9 @@ show_bearing = false;
 					polygon([[0,-thickness+(15-bearing_thickness)/2], 
 										[-height-additional_height,-thickness+(15-bearing_thickness)/2],
 										[0,-thickness] ] );
+	
 			}
-		}	
+		}
 		rotate( [90,0,0] ) translate([ -width/2, height, 0])
 			through_hole( 0,0,bearing_inner_diameter/2,100);
 	}
