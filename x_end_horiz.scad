@@ -322,7 +322,7 @@ module x_end_horiz_holder_bottom(lb_diameter,lb_inner_diameter, lb_thickness,
 									bottom_width/2-0.1]) mirror([0,1,0])
 						belt_bearing_support_side( bottom_height-(15-bearing_thickness)/2-0.225,
 														bearing_diameter/2 +3,
-														bearing_inner_diameter ,8, thickness/2.2,[false,true] );
+														bearing_inner_diameter ,8, 0,[false,true] );
 			}
 		}// union
 		union() { //sub area
