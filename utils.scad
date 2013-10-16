@@ -31,7 +31,7 @@ module through_hole(x,y,rad,deep,fn=100) {
 module nut_trap_hole(radius,height,nut_depth,nut_thickness,nut_size,trap_size) {
 	mirror([0,0,1])
 		cylinder( r = radius, h = nut_depth-nut_thickness-0.1, $fn = 100 );
-	translate([0,0,-nut_depth+0.1]) {
+	translate([0,0,-nut_depth-0.1]) {
 		hull(){
 			cylinder( r = nut_size, h = nut_thickness, $fn = 6 );
 			translate([trap_size,0,0]) 

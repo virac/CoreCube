@@ -15,7 +15,7 @@ holder_thickness = 3;
 holder_clasp = 7;
 
 rod_diameter = 10;
-rod_separation = 35;
+rod_separation = 50;
 rod_thickness = 5;
 rod_grip = 30;
 
