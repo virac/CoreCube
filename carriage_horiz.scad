@@ -49,11 +49,11 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 						[-(b_width/2-h_offset), (b_height/2-h_offset)],
 						[-(b_width/2-h_offset),-(b_height/2-h_offset)]];
 	mount_width = 2*lb_thickness+lb_separation;
-	mount_height= lb_diameter+r_separation;
-	lb_steps = [[-(mount_width)/2,-r_separation/2,0],
-					[-(mount_width)/2, r_separation/2,180],
-					[ (mount_width)/2, r_separation/2,180],
-					[ (mount_width)/2,-r_separation/2,0]];
+	mount_length= 2*h_thickness+ lb_diameter+r_separation;
+	lb_steps = [[-(lb_thickness+lb_separation)/2,-r_separation/2,0],
+					[-(lb_thickness+lb_separation)/2, r_separation/2,180],
+					[ (lb_thickness+lb_separation)/2, r_separation/2,180],
+					[ (lb_thickness+lb_separation)/2,-r_separation/2,0]];
 	difference() {
 		union() {
 			for( i = [0:3] ) {
@@ -63,15 +63,11 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 						linear_bearing_holder( lb_diameter, lb_thickness, r_diameter, r_thickness,
 												gap, h_thickness,clasp, false );
 			}
-			cube([brace_width,brace_height,b_thickness],center=true);
-
-
-
-			
-			
+			cube([mount_width,mount_length,b_thickness],center=true);
 
 		}//union
 		union() {
+		#	translate([0,0,b_thickness/2+0.1]) rotate([180,0,0]) cylinder( r = 15, h = b_thickness+0.2 );
 		}
 	}//difference
 }
