@@ -44,24 +44,20 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 					gap, h_thickness, clasp,
 					g_offset, g_width, g_height, g_thickness, g_extra, g_hole,
 					b_width, b_height,b_thickness, h_offset, belt_offset ) {
-	lb_steps = [[-1,-1,0], [-1, 1,180], [ 1, 1,180], [ 1,-1,0]];
 	mount_holes = [[ (b_width/2-h_offset), (b_height/2-h_offset)],
 						[ (b_width/2-h_offset),-(b_height/2-h_offset)],
 						[-(b_width/2-h_offset), (b_height/2-h_offset)],
 						[-(b_width/2-h_offset),-(b_height/2-h_offset)]];
-	brace_width = lb_thickness*2+lb_separation;
-	brace_height= lb_diameter+r_separation+28;
-	brace_holes = [[ (brace_width/2-h_offset), (brace_height/2-h_offset)],
-						[ (brace_width/2-h_offset),-(brace_height/2-h_offset)],
-						[-(brace_width/2-h_offset), (brace_height/2-h_offset)],
-						[-(brace_width/2-h_offset),-(brace_height/2-h_offset)],
-						[    m3_diameter*1.5      , g_width/2+g_extra/6      ],
-						[   -m3_diameter*1.5      , g_width/2+g_extra/6      ]];
+	mount_width = 2*lb_thickness+lb_separation;
+	mount_height= lb_diameter+r_separation;
+	lb_steps = [[-(mount_width)/2,-r_separation/2,0],
+					[-(mount_width)/2, r_separation/2,180],
+					[ (mount_width)/2, r_separation/2,180],
+					[ (mount_width)/2,-r_separation/2,0]];
 	difference() {
 		union() {
 			for( i = [0:3] ) {
-				translate([lb_steps[i][0]*(lb_thickness+lb_separation)/2,
-							  lb_steps[i][1]*r_separation/2,
+				translate([lb_steps[i][0], lb_steps[i][1],
 							  lb_diameter/2+b_thickness/2+0.1]) 
 					rotate([0,-90,lb_steps[i][2]]) 
 						linear_bearing_holder( lb_diameter, lb_thickness, r_diameter, r_thickness,
