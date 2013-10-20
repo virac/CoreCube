@@ -4,7 +4,7 @@ include <bolts.scad>
 linear_bearing_diameter = 19.2;
 linear_bearing_inner_diameter = 10;
 linear_bearing_thickness = 29;
-linear_bearing_separation = 20;
+linear_bearing_separation = 35;
 
 holder_gap = 10;
 holder_thickness = 3;
@@ -67,10 +67,27 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 
 		}//union
 		union() {
-		#	translate([0,0,b_thickness/2+0.1]) rotate([180,0,0]) cylinder( r = 15, h = b_thickness+0.2 );
+			translate([0,0,b_thickness/2+0.1]) rotate([180,0,0]) {
+				cylinder( r = 20.5, h = b_thickness+0.2 );
+	
+				rotate(a=[0, 0, 116]){
+					translate(v=[0, -25, 0]) cylinder(r=m4_diameter/2, h=b_thickness+0.2, $fn = 20);
+					translate(v=[0,  25, 0]) cylinder(r=m4_diameter/2, h=b_thickness+0.2, $fn = 20);
+				}
+				rotate(a=[0, 0, -116]){
+					translate(v=[0, -25, 0]) cylinder(r=m4_diameter/2, h=b_thickness+0.2, $fn = 20);
+					translate(v=[0,  25, 0]) cylinder(r=m4_diameter/2, h=b_thickness+0.2, $fn = 20);
+				}
+				rotate(a=[0, 0, 90]){
+					translate(v=[0, -25, 0]) cylinder(r=m4_diameter/2, h=b_thickness+0.2, $fn = 20);
+					translate(v=[0,  25, 0]) cylinder(r=m4_diameter/2, h=b_thickness+0.2, $fn = 20);
+				}
+			}
 		}
 	}//difference
 }
+
+
 function GT2_2mm_depth() = 0.764;
 function GT2_2mm_width() = 1.494; //width of the tooth
 function GT2_2mm_spacing() = 0.508; //ammount of space on inbetween 2 teeth
