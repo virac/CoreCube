@@ -35,11 +35,16 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 		union() {
 			translate([0,0,c_l/2])
 				cube([c_od/2+c_t,c_od+2*c_t,c_l], center = true );
-			difference() {
+			difference() {;
 				translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
 					cylinder( r1 = c_od/2, r2 = st_id/2,h = s_cs);
 					translate([0,0,s_cs]) cylinder(r = st_id/2,h = st_id/2);
-					translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2,h = st_g);
+					translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2,h = st_g,$fn=30);
+					translate([-st_g,0,st_id/2+s_cs]) rotate(st_a) cylinder(r1 = st_id/2,r2=0,h = st_id,$fn=30);
+					translate([-st_g*0.85+0.5,0,st_id/2+s_cs]) 
+						rotate(st_a) cylinder(r2 = st_id/2*1.1,r1 = st_id/2,h = 1,$fn=30);
+					translate([-st_g*0.85-.5,0,st_id/2+s_cs]) rotate(st_a) 
+						cylinder(r2 = st_id/2,r1 = st_id/2*1.1,h = 1,$fn=30);
 					translate([0,0,s_cs]) intersection() {
 						cylinder(r = st_id/2,h = st_id);
 						translate([st_id/2,0,st_id/2]) rotate(st_a) cylinder(r = st_id/2,h = s_cs);
@@ -48,8 +53,8 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 				union() {
 					translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
 						cylinder( r1 = c_od/2*hole_per, r2 = st_id/2*hole_per,h = s_cs);
-						translate([0,0,s_cs]) cylinder(r = st_id/2*hole_per,h = st_id/2);
-						translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2*hole_per,h = st_g);
+						translate([0,0,s_cs-0.1]) cylinder(r = st_id/2*hole_per,h = st_id/2+0.1);
+						translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2*hole_per,h = st_g+st_id,$fn=30);
 						translate([0,0,s_cs]) intersection() {
 							cylinder(r = st_id/2*hole_per,h = st_id);
 							translate([st_id/2,0,st_id/2]) rotate(st_a) cylinder(r = st_id/2*hole_per,h = s_cs);
