@@ -39,6 +39,13 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 				translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
 					cylinder( r1 = c_od/2, r2 = st_id/2,h = s_cs);
 					translate([0,0,s_cs]) cylinder(r = st_id/2,h = st_id/2);
+
+					intersection() {
+						translate([2,0,st_id/2+s_cs*1.25]) rotate([0,135,0]) translate([0,0,-1])
+							cylinder(r2 = st_id/2,r1 = st_id/2*0.85,h = st_g,$fn=30);
+						translate([0,0,c_l/4-1])
+							cube([c_l,c_od+2*c_t,c_od/2+c_t], center = true );
+					}
 					translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2,h = st_g,$fn=30);
 					translate([-st_g,0,st_id/2+s_cs]) rotate(st_a) cylinder(r1 = st_id/2,r2=0,h = st_id,$fn=30);
 					translate([-st_g*0.85+0.5,0,st_id/2+s_cs]) 
