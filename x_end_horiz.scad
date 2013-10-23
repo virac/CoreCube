@@ -34,7 +34,7 @@ y2_limit_switch = true;
 belt_grab1 = false;
 belt_grab2 = true;
 
-assembled = false;
+assembled = true;
 
 show_lb = true;
 show_bottom = true;
@@ -438,7 +438,7 @@ show_bearing = false;
 					}
 				
 					
-					rotate([0,90,180]) rotate([90,0,0])translate([-height,width/2,thickness+15]) 
+					rotate([0,90,180]) rotate([90,0,0])translate([-height,width/2,bearing_thickness+10]) 
 						hull() {
 							cylinder(r=4.7,h=3,$fn=6);
 							translate([-10,0,0])
