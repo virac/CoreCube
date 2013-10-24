@@ -64,7 +64,21 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 												gap, h_thickness,clasp, false );
 			}
 			cube([mount_width,mount_length,b_thickness],center=true);
-
+			for( i = [0:1] ) mirror([i,0,0]) {
+				translate([lb_thickness+lb_separation/2+g_thickness/2,0,(g_width+g_extra)/2+b_thickness/2])
+					difference() {
+						union(){
+							cube([g_thickness,g_height,g_width+g_extra],center=true);
+						}
+						union() {//sub area
+							for( i = [-3:3] )
+							{
+								translate([i*(GT2_2mm_spacing()+GT2_2mm_width()),-g_height/2,-(g_width+g_extra)/4]) 
+									GT2_2mm(g_width);
+							}
+						}// union sub area
+					}
+			}
 		}//union
 		union() {
 			translate([0,0,b_thickness/2+0.1]) rotate([180,0,0]) {
