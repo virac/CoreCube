@@ -19,7 +19,7 @@ grip_offset = 0;
 grip_width = 15;
 grip_height = m5_nut_diameter + 8; //6.4+8=14.8
 grip_thickness = 10;
-grip_extra = 15;
+grip_extra = 9;
 grip_hole = 4;
 
 base_mount_thickness = 4;
@@ -39,11 +39,14 @@ carriage_horiz(linear_bearing_diameter, linear_bearing_inner_diameter,
 			cable_brace_offset);
 
 
+translate([linear_bearing_thickness+linear_bearing_separation/2+grip_thickness*2,0,0]) belt_grabber(grip_width, grip_thickness, grip_extra,base_mount_thickness);
+
 module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					r_diameter, r_separation, r_thickness, 
 					gap, h_thickness, clasp,
 					g_offset, g_width, g_height, g_thickness, g_extra, g_hole,
 					b_width, b_height,b_thickness, h_offset, belt_offset ) {
+show_grabber = false;
 	mount_holes = [[ (b_width/2-h_offset), (b_height/2-h_offset)],
 						[ (b_width/2-h_offset),-(b_height/2-h_offset)],
 						[-(b_width/2-h_offset), (b_height/2-h_offset)],
@@ -69,13 +72,10 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 					difference() {
 						union(){
 							cube([g_thickness,g_height,g_width+g_extra],center=true);
+							if( show_grabber == true ) translate([0,-g_height/2-b_thickness/2,0]) rotate([-90,0,0])
+								 belt_grabber( g_width, g_thickness, g_extra, b_thickness );
 						}
 						union() {//sub area
-							for( i = [-3:3] )
-							{
-								translate([i*(GT2_2mm_spacing()+GT2_2mm_width()),-g_height/2,-(g_width+g_extra)/4]) 
-									GT2_2mm(g_width);
-							}
 						}// union sub area
 					}
 			}
@@ -101,6 +101,27 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 	}//difference
 }
 
+module belt_grabber( g_width, g_thickness, g_extra, b_thickness ) {
+	difference() {
+		union() {
+			cube([g_thickness,g_width + 2*g_extra - g_thickness,b_thickness],center = true);
+
+			translate([0,g_width/2+g_extra-g_thickness/2,-b_thickness/2])
+				cylinder( r = g_thickness/2,h = b_thickness);
+			translate([0,-(g_width/2+g_extra-g_thickness/2),-b_thickness/2])
+				cylinder( r = g_thickness/2,h = b_thickness);
+		}
+		union() {
+			for( i = [-3:3] )
+			{
+				translate([i*(GT2_2mm_spacing()+GT2_2mm_width()),-g_width/2,b_thickness/2]) rotate([-90,0,0])
+					GT2_2mm(g_width);
+			}
+			through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
+			through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
+		}
+	}
+}
 
 function GT2_2mm_depth() = 0.764;
 function GT2_2mm_width() = 1.494; //width of the tooth
