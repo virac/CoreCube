@@ -15,7 +15,7 @@ rod_separation = 50;
 rod_thickness = 5;
 rod_grip = 30;
 
-grip_offset = 0;
+grip_offset = 5;
 grip_width = 15;
 grip_height = m5_nut_diameter + 8; //6.4+8=14.8
 grip_thickness = 10;
@@ -46,7 +46,7 @@ module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separati
 					gap, h_thickness, clasp,
 					g_offset, g_width, g_height, g_thickness, g_extra, g_hole,
 					b_width, b_height,b_thickness, h_offset, belt_offset ) {
-show_grabber = false;
+show_grabber = false ;
 	mount_holes = [[ (b_width/2-h_offset), (b_height/2-h_offset)],
 						[ (b_width/2-h_offset),-(b_height/2-h_offset)],
 						[-(b_width/2-h_offset), (b_height/2-h_offset)],
@@ -68,14 +68,30 @@ show_grabber = false;
 			}
 			cube([mount_width,mount_length,b_thickness],center=true);
 			for( i = [0:1] ) mirror([i,0,0]) {
-				translate([lb_thickness+lb_separation/2+g_thickness/2,0,(g_width+g_extra)/2+b_thickness/2])
+				translate([lb_thickness+lb_separation/2+g_thickness/2,0,(g_width/2+g_extra)-b_thickness/2])
 					difference() {
 						union(){
-							cube([g_thickness,g_height,g_width+g_extra],center=true);
+							hull() {
+								cube([g_thickness,g_height,g_width + 2*g_extra - g_thickness],center=true);
+								rotate([90,0,0]) translate([0,g_width/2+g_extra-g_thickness/2,-g_height/2])
+									cylinder( r = g_thickness/2,h = g_height);
+								rotate([90,0,0]) translate([0,-(g_width/2+g_extra-g_thickness/2),-g_height/2])
+									cylinder( r = g_thickness/2,h = g_height);
+								translate([-g_thickness/4,0,-(g_width/2+g_extra-b_thickness/2)]) 
+									cube([g_thickness/2,g_height,b_thickness],center=true);
+							}
 							if( show_grabber == true ) translate([0,-g_height/2-b_thickness/2,0]) rotate([-90,0,0])
 								 belt_grabber( g_width, g_thickness, g_extra, b_thickness );
 						}
 						union() {//sub area
+							rotate([90,0,0]) through_hole( 0, g_width/2+g_extra/2,m3_diameter/2,100);
+							rotate([90,0,0]) through_hole( 0,-(g_width/2+g_extra/2),m3_diameter/2,100);
+							translate([-g_thickness/2-0.1,-g_offset/2,0])rotate([0,90,0]) {
+								cylinder( r = m5_diameter/2, h = 100, $fn = 100 );
+								cylinder( r = m5_nut_diameter/2, h = m5_nut_thickness, $fn = 6 );
+							}
+							translate([0,g_height/2-g_offset/2+0.1,0])
+								cube([g_thickness+0.1,g_offset+0.2,g_width],center = true);
 						}// union sub area
 					}
 			}
@@ -103,7 +119,7 @@ show_grabber = false;
 
 module belt_grabber( g_width, g_thickness, g_extra, b_thickness ) {
 	difference() {
-		union() {
+		hull() {
 			cube([g_thickness,g_width + 2*g_extra - g_thickness,b_thickness],center = true);
 
 			translate([0,g_width/2+g_extra-g_thickness/2,-b_thickness/2])
