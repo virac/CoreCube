@@ -29,18 +29,19 @@ belt_thickness = 1.75;
 linear_bearing_support_structure = false;
 support_offset = 1;
 
-translate ([22,0,0]) 
+translate ([25,0,0]) 
 	x_end_vert( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
 
-mirror([1,0,0]) translate ([22,0,0]) 
+mirror([1,0,0]) translate ([25,0,0]) 
 	x_end_vert( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 100 );
 
 
-translate([0,1.25*rod_grip,20]) rotate([90,-90,0]){
+translate([0,1.25*rod_grip,20+holder_thickness]) rotate([90,-90,0]){
+//translate([1.32*rod_grip,0,-10]) {
 		translate([0,0,linear_bearing_thickness/2]) {
 			linear_bearing_holder( linear_bearing_diameter, linear_bearing_thickness, rod_diameter, rod_thickness,
 											holder_gap, holder_thickness,holder_clasp, true, 0,true, support_offset );

@@ -241,7 +241,9 @@ module linear_bearing_holder( lb_diameter, lb_thickness, r_diameter, r_thickness
 							}
 					}
 					translate([-lb_thickness-1,thickness,-lb_thickness/2+r_diameter/2+r_thickness])
-						cube([3*r_thickness/2,r_thickness,thickness]);
+						cube([2*r_thickness,r_thickness*1.5,thickness*2]);
+					translate([-lb_thickness-1-thickness+0.1,-thickness,1+support_offset])
+						mirror([0,0,1]) cube([thickness,r_thickness*1.5+thickness*2,lb_thickness]);
 					translate([-lb_diameter/2-lb_thickness/2-1,-thickness,-thickness*3]){
 						rotate([90,0,180]) hull() {
 							cylinder( r = m3_diameter*1.5, h = 4, center= true, $fn = 100 );
@@ -254,7 +256,8 @@ module linear_bearing_holder( lb_diameter, lb_thickness, r_diameter, r_thickness
 		} //union
 
 		translate([0,0,support_offset]){
-			cylinder( r = lb_diameter/2, h = lb_thickness+2+2*support_offset+0.1, center= true, $fn = 100 );
+			cylinder( r = (r_diameter+abs(r_diameter-lb_diameter)/2)/2, h = lb_thickness+2+2*support_offset+0.1, center= true, $fn = 100 );
+			cylinder( r = lb_diameter/2, h = lb_thickness+0.1, center= true, $fn = 100 );
 
 			translate([0,-gap/2,-lb_thickness/2-1])
 				cube( [lb_diameter*2,gap, lb_thickness+2+2*support_offset] );
