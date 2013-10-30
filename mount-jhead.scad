@@ -66,9 +66,9 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 					e_width, e_height, e_thickness, e_vert_offset,
 					g_offset, g_width, g_height, g_thickness, g_extra, g_hole,
 					body_dia, body_height, body_size, h_offset,c_width ) {
-	mount_holes = [[ (b_width/2-h_offset), (b_height/2-h_offset)],
+	mount_holes = [[ (b_width/2-h_offset)-m3_diameter*2, (b_height/2-h_offset)],
 						[ (b_width/2-h_offset),-(b_height/2-h_offset)],
-						[-(b_width/2-h_offset), (b_height/2-h_offset)],
+						[-(b_width/2-h_offset)+m3_diameter*2, (b_height/2-h_offset)],
 						[-(b_width/2-h_offset),-(b_height/2-h_offset)]];
 	brace_width = lb_thickness*2+lb_separation;
 	brace_height= lb_diameter+r_separation+28;
