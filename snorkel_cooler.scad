@@ -1,4 +1,4 @@
-use <utils.scad>
+include <utils.scad>
 
 cooler_outer_diameter = 25;
 cooler_grip_diameter = 24;
@@ -21,12 +21,11 @@ snorkel_mount_half( cooler_outer_diameter, cooler_grip_diameter, cooler_length, 
 				 snorkel_tube_angle,snorkel_cone_size, 100 );
 
 
-translate([-cooler_outer_diameter,0,0]) mirror([1,0,0])
+translate([-cooler_outer_diameter,0,0]) rotate([0,0,180])
 	snorkel_mount_half( cooler_outer_diameter, cooler_grip_diameter, cooler_length, cooler_thickness,
 				 cooler_fin_count, cooler_fin_length, cooler_fin_gap,
 				 snorkel_tube_inner_diameter, snorkel_tube_grip,
 				 snorkel_tube_angle, snorkel_cone_size, 6 );
-
 
 module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 							st_id, st_g, st_a, s_cs, mount_faces ) {
@@ -35,6 +34,62 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 		union() {
 			translate([0,0,c_l/2])
 				cube([c_od/2+c_t,c_od+2*c_t,c_l], center = true );
+			rotate([90,90,-90])translate([-c_l/2,-(c_od+2*c_t)/2-5,(c_od/2+c_t)/2-1.5]) difference() {
+				union() {
+					cube([15,10,3],center = true);
+					hull() translate([7.5-3,-5,-3.5]) {
+						rotate([0,90,0]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[5,10]]);
+						translate([5,0,2]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[6.5,10]]);
+					}
+					hull() translate([-7.5,-5,-3.5]) {
+						rotate([0,90,0]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[5,10]]);
+						mirror([1,0,0]) translate([2,0,2]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[6.5,10]]);
+					}
+				}
+				translate([0,0,1.6]) rotate([180,0,0])
+					cylinder( r = m3_diameter/2, h = 4, $fn = 100 );
+			}
+			rotate([90,90,90]) mirror([0,0,1]) translate([-c_l/2,-(c_od+2*c_t)/2-5,(c_od/2+c_t)/2-1.5]) difference() {
+				union() {
+					cube([15,10,3],center = true);
+					hull() translate([7.5-3,-5,-3.5]) {
+						rotate([0,90,0]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[5,10]]);
+						translate([5,0,2]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[6.5,10]]);
+					}
+					hull() translate([-7.5,-5,-3.5]) {
+						rotate([0,90,0]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[5,10]]);
+						mirror([1,0,0]) translate([2,0,2]) linear_extrude( height = 3) 
+							polygon([[-2,10],
+										[-2,0],
+										[6.5,10]]);
+					}
+				}
+				translate([0,0,1.6]) rotate([180,0,0])
+					cylinder( r = m3_diameter/2, h = 4, $fn = 100 );
+				rotate([180,0,0])
+					cylinder( r = m3_nut_diameter/2, h = 4, $fn = 6 );
+			}
 			difference() {;
 				translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
 					cylinder( r1 = c_od/2, r2 = st_id/2,h = s_cs);
