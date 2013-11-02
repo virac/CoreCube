@@ -133,8 +133,33 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 			}
 		}
 		union() {
-			translate([-c_od/4-c_t/2,0,-0.1])
-				cylinder( r = c_od/2, h = c_l+0.2 );
+			difference() {
+				translate([-c_od/4-c_t/2,0,-0.1])
+					cylinder( r = c_od/2, h = c_l+0.2 );
+				translate([-c_od/4-c_t/2,0,c_l-c_fl]) mirror([0,0,1]) difference() {
+					cylinder( r = c_od/2, h = c_fg );
+					union() {
+						translate([0,0,-0.1]) 
+							cylinder( r1 = c_od/2, r2 = c_od/2-0.5, h = c_fg/6+0.2 );
+						translate([0,0,c_fg/6])
+							cylinder( r = c_od/2-0.5, h = c_fg/8*6 );
+						translate([0,0,c_fg/6*5])
+							cylinder( r2 = c_od/2, r1 = c_od/2-0.5, h = c_fg/6+0.1 );
+					}
+				}
+
+				translate([-c_od/4-c_t/2,0,c_fl]) difference() {
+					cylinder( r = c_od/2, h = c_fg );
+					union() {
+						translate([0,0,-0.1]) 
+							cylinder( r1 = c_od/2, r2 = c_od/2-0.5, h = c_fg/6+0.2 );
+						translate([0,0,c_fg/6])
+							cylinder( r = c_od/2-0.5, h = c_fg/8*6 );
+						translate([0,0,c_fg/6*5])
+							cylinder( r2 = c_od/2, r1 = c_od/2-0.5, h = c_fg/6+0.1 );
+					}
+				}
+			}
 			translate([c_od/4+c_t/2+0.1,0,c_l/2]) rotate([0,90,0]) rotate([0,180,0]) {
 				cylinder( r1 = c_od/2*hole_per,r2 = (c_od/2+c_t)*hole_per,h = c_t+0.1);
 				translate([0,0,c_t]) cylinder( r= (c_od/2+c_t)*hole_per,h = c_l);
