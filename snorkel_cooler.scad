@@ -61,6 +61,13 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 				translate([0,0,1.6]) rotate([180,0,0])
 					cylinder( r = m3_diameter/2, h = 4, $fn = 100 );
 			}
+			translate([-(c_od/2+c_t)/2,(c_od)/2+c_t/3,c_l/2]) {
+					rotate([-90,0,0]) linear_extrude( height = c_t/3) 
+							polygon([[0.1,c_l/2-0.5],
+										[-c_t/2,c_l/2-c_t],
+										[-c_t/2,-c_l/2+c_t],
+										[0.1,-c_l/2+0.5]]);
+			}
 			rotate([90,90,90]) mirror([0,0,1]) translate([-c_l/2,-(c_od+2*c_t)/2-5,(c_od/2+c_t)/2-1.5]) difference() {
 				union() {
 					cube([15,10,3],center = true);
@@ -131,6 +138,13 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 			translate([c_od/4+c_t/2+0.1,0,c_l/2]) rotate([0,90,0]) rotate([0,180,0]) {
 				cylinder( r1 = c_od/2*hole_per,r2 = (c_od/2+c_t)*hole_per,h = c_t+0.1);
 				translate([0,0,c_t]) cylinder( r= (c_od/2+c_t)*hole_per,h = c_l);
+			}
+			translate([-(c_od/2+c_t)/2,-(c_od)/2-2*c_t/3,c_l/2]) mirror([1,0,0]) {
+					rotate([-90,0,0]) linear_extrude( height = c_t/3) 
+							polygon([[0.1,c_l/2-0.5],
+										[-c_t/2,c_l/2-c_t],
+										[-c_t/2,-c_l/2+c_t],
+										[0.1,-c_l/2+0.5]]);
 			}
 		}
 	}
