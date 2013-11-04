@@ -40,6 +40,7 @@ carriage_horiz(linear_bearing_diameter, linear_bearing_inner_diameter,
 
 
 translate([linear_bearing_thickness+linear_bearing_separation/2+grip_thickness*2,0,0]) belt_grabber(grip_width, grip_thickness, grip_extra,base_mount_thickness);
+translate(-[linear_bearing_thickness+linear_bearing_separation/2+grip_thickness*2,0,0]) belt_grabber(grip_width, grip_thickness, grip_extra,base_mount_thickness);
 
 module carriage_horiz( lb_diameter, lb_inner_diameter, lb_thickness, lb_separation,
 					r_diameter, r_separation, r_thickness, 
