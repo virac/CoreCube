@@ -222,6 +222,8 @@ module belt_brace(brace_width, brace_height, brace_holes, h_thickness, g_offset,
 		through_hole( 0, brace_holes[0][1],m3_diameter/2,100);
 		through_hole( 0, brace_holes[1][1],m3_diameter/2,100);
 	}
+			translate([0,g_offset,g_hole/2-0.1]) scale([1,0.9,0.95])
+				cube([g_thickness+0.1,g_width,h_thickness+g_hole+0.1],center = true);
 }
 
 function GT2_2mm_depth() = 0.764;
