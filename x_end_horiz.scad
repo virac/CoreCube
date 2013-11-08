@@ -40,17 +40,18 @@ show_lb = true;
 show_bottom = true;
 show_belt_grab = true;
 
-translate([-(assembled==true?0:1)*2*rod_separation,0,-holder_thickness])
+
+translate([-(assembled==true?0:1)*rod_separation/2,0,-holder_thickness]) rotate([0,0,(assembled==true?0:1)*-90])
 	x_end_horiz_holder_top( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness, support_offset,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
 
-if ( show_bottom == true ) translate([(assembled==true?0:1)*2*rod_separation,0,(-(linear_bearing_diameter/2+holder_thickness + 1)-rod_diameter/2-holder_thickness)]) rotate([(assembled==true?0:1)*180,0,0])
+if ( show_bottom == true ) translate([(assembled==true?0:1)*rod_separation/2,0,(-(linear_bearing_diameter/2+holder_thickness + 1)-rod_diameter/2-holder_thickness)]) rotate([(assembled==true?0:1)*180,0,(assembled==true?0:1)*-90])
 	x_end_horiz_holder_bottom( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 			rod_diameter, rod_separation, rod_grip, rod_thickness, support_offset,
 			holder_gap, holder_thickness, holder_clasp, bearing_diameter, 6);
 
-if ( show_lb == true ) translate([0,1.25*rod_grip * (assembled==true?0:1) ,11.25*(assembled==true?0:1)]) 
+if ( show_lb == true ) translate([0,-linear_bearing_thickness/4 * (assembled==true?0:1) ,11.25*(assembled==true?0:1)]) 
 rotate([90*(assembled==true?-1:1),-90*(assembled==true?0:1),90*(assembled==true?1:0)])// this proll will need to be changed...
 {
 	translate([0,0,linear_bearing_thickness/2]) {
@@ -70,8 +71,8 @@ rotate([90*(assembled==true?-1:1),-90*(assembled==true?0:1),90*(assembled==true?
 }
 
 if( show_belt_grab == true ) {
-	translate([(assembled==true?0:1)*2*rod_separation,
-					(assembled==true?0:1)*-20,
+	translate([(assembled==true?0:1)*rod_separation/2,
+					(assembled==true?0:1)*-linear_bearing_thickness*2,
 					(assembled==true?1:-0.625)*(-(linear_bearing_diameter/2+holder_thickness + 1)-rod_diameter/2-holder_thickness)]) 
 		x_end_horiz_belt_grab( linear_bearing_diameter, linear_bearing_inner_diameter, linear_bearing_thickness, 
 				rod_diameter, rod_separation, rod_grip, rod_thickness, support_offset,
