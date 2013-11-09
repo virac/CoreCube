@@ -25,7 +25,7 @@ dist_from_rod_x = -12.5;
 
 belt_thickness = 1.75;
 linear_bearing_support_structure = false;
-support_offset = 1;
+support_offset = 10;
 
 x_limit_switch = true;
 y1_limit_switch = false;
@@ -178,7 +178,7 @@ module x_end_horiz_holder_top( lb_diameter,lb_inner_diameter, lb_thickness,
 					cylinder(r= r_diameter/2, h = grip+0.1 );
 			}
 			translate([0,0,h_thickness]) rotate([0,90,0]){ //cut out for the linear bearing 
-				cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness*2+s_offset*4, center= true, $fn = 100 );
+				cylinder( r = lb_diameter/2+h_thickness + 1, h = lb_thickness*2+s_offset*2+2, center= true, $fn = 100 );
 				cylinder( r = lb_diameter/2 + 1, h = (lb_thickness*2+s_offset)*2, center= true, $fn = 100 );
 			}
 			translate([0,-grip-5,0.1]) { // limit switch mount
