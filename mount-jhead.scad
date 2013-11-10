@@ -22,7 +22,7 @@ rod_separation = 35;
 jhead_mount_width = 30;
 jhead_mount_height = 18;
 jhead_mount_thickness = 16;
-jhead_mount_vertical_offset = -10;
+jhead_mount_vertical_offset = 0;
 
 slot_style = false;
 filament_size = 17.5;//m5_tap_dia;
@@ -215,6 +215,10 @@ module jhead_hull( body_dia, body_height, f_size, b_thickness, hull_length = [0,
 		}
 		hull() {
 			cylinder( r = body_dia[3]/2, h = body_height[3], $fn = 100 );
+			translate( hull_length ) cylinder( r = body_dia[3]/2, h = body_height[3], $fn = 100 );
+		}
+		translate([0,0,body_height[3]]) hull() {
+			cylinder( r = 25/2, h = body_height[3], $fn = 100 );
 			translate( hull_length ) cylinder( r = body_dia[3]/2, h = body_height[3], $fn = 100 );
 		}
 	}
