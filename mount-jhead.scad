@@ -94,7 +94,7 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 			}//union add section
 			union() {//removal section
 				translate([0,e_vert_offset-e_height,b_thickness/2])
-						cube([e_width,e_height,b_thickness+0.2],center=true);
+						cube([b_width-m3_diameter*3-h_offset*2,e_height,b_thickness+0.2],center=true);
 				translate([0,e_vert_offset+e_height/2+.1,b_thickness+box_thickness/2]) rotate([90,0,0]) {
 					jhead_hull(body_dia, body_height, f_size, b_thickness, [0,8,0] );
 					if( slot_style == false ) {
