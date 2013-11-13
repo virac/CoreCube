@@ -166,7 +166,7 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 		}// if s_style
 
 		//wire guide
-		translate([e_width/2,-(body_height[0]+body_height[1])/2-b_thickness+m3_nut_diameter/2,b_thickness]) rotate([-90,0,0]) difference() {
+		translate([e_width/2,e_vert_offset+m3_nut_diameter/2-0.3,b_thickness]) rotate([-90,0,0]) difference() {
 			intersection(){ 
 				cylinder( r = m5_diameter+2, h = e_height/2 -((body_height[0]+body_height[1])/2-b_thickness+m3_nut_diameter/2)/2, $fn = 100 );
 				translate([0,-3,0]) cube([50,10,50],center=true);
@@ -176,7 +176,7 @@ module mount( b_width, b_height, b_thickness, f_size, s_style,
 				translate([0,0,3]) rotate([0,0,8]) cube([1.5,20,e_height -((body_height[0]+body_height[1])/2-b_thickness+m3_nut_diameter/2)], center=true);
 			}
 		}
-		translate([-e_width/2,-(body_height[0]+body_height[1])/2-b_thickness+m3_nut_diameter/2,b_thickness]) rotate([-90,0,0]) difference() {
+		translate([-e_width/2,e_vert_offset+m3_nut_diameter/2-0.3,b_thickness]) rotate([-90,0,0]) difference() {
 			intersection(){ 
 				cylinder( r = m5_diameter+2, h = e_height/2 -((body_height[0]+body_height[1])/2-b_thickness+m3_nut_diameter/2)/2, $fn = 100 );
 				translate([0,-3,0]) cube([50,10,50],center=true);
