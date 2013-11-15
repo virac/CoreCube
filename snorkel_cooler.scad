@@ -29,7 +29,7 @@ translate([-cooler_outer_diameter,0,0]) rotate([0,0,180])
 
 module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 							st_id, st_g, st_a, s_cs, mount_faces ) {
-	hole_per = 0.8;
+	hole_per = 0.7;
 	difference() {
 		union() {
 			translate([0,0,c_l/2])
@@ -97,7 +97,7 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 				rotate([180,0,0])
 					cylinder( r = m3_nut_diameter/2, h = 4, $fn = 6 );
 			}
-			difference() {;
+			difference() {
 				translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
 					cylinder( r1 = c_od/2, r2 = st_id/2,h = s_cs);
 					hull() {
@@ -123,12 +123,12 @@ module snorkel_mount_half( c_od, c_gd, c_l, c_t, c_fc, c_fl, c_fg,
 				}
 				union() {
 					translate([c_od/4+c_t/2,0,c_l/2]) rotate([0,90,0]) {
-						cylinder( r1 = c_od/2*hole_per, r2 = st_id/2*hole_per,h = s_cs);
-						translate([0,0,s_cs-0.1]) cylinder(r = st_id/2*hole_per,h = st_id/2+0.1);
+						cylinder( r1 = c_od/2*hole_per, r2 = st_id/2*hole_per,h = s_cs*hole_per);
+						translate([0,0,s_cs-5]) cylinder(r = st_id/2*hole_per,h = st_id/2+5.1);
 						translate([0,0,st_id/2+s_cs]) rotate(st_a) cylinder(r = st_id/2*hole_per,h = st_g+st_id,$fn=30);
 						translate([0,0,s_cs]) intersection() {
-							cylinder(r = st_id/2*hole_per,h = st_id);
-							translate([st_id/2,0,st_id/2]) rotate(st_a) cylinder(r = st_id/2*hole_per,h = s_cs);
+							cylinder(r = st_id/2*hole_per,h = st_id*2);
+							translate([st_id/2,0,st_id/2]) rotate(st_a) cylinder(r = st_id/2*hole_per,h = s_cs*2);
 						}
 					}
 				}
