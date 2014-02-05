@@ -98,7 +98,10 @@ module z_supprt_frame( length_f,height_f, thickness_s, thickness_f, width_s, wid
 	}
 }
 
-module tesalate( thickness_f, width_s, points, level =2, debug = false ) {
+shrink = 4/5;
+//This method takes the points shifts them by +/- width_s/2 perpendicular to the line segment of point0 
+//  and the midpoint between point1 and 2 once so many levels are generated down will render the points
+module tesalate( thickness_f, width_s, points, level = 2, debug = false ) {
 	base_line = lineFromPoints( points[1], points[2] );
 	//center_line = perpendicularLineThrough( base_line, points[0] );
 	center_line = midpointOfLineThrough( points[1], points[2], points[0] );
@@ -108,35 +111,74 @@ module tesalate( thickness_f, width_s, points, level =2, debug = false ) {
 	arc_line1 = lineFromPoints( points[0], points[1] );
 	arc_line2 = lineFromPoints( points[0], points[2] );
 	
+	p4 = midpoint( points[1], points[2] );
 	p5 = line_intersection( center1, base_line );
-	p6 = line_intersection( center1, arc_line2 );
+	p6_1 = line_intersection( center1, arc_line1 );
+	p6_2 = line_intersection( center1, arc_line2 );
 	p7 = line_intersection( center2, base_line );
-	p8 = line_intersection( center2, arc_line1 );
-	if( debug == true && level == 1 ) {
+	p8_1 = line_intersection( center2, arc_line1 );
+	p8_2 = line_intersection( center2, arc_line2 );
+	
+	if( debug == true ) {
+		echo(" !!!!!!!!!!!!!!!!!!!!!!!! ");
+		echo("level  ",level);
+		echo("w/2    ",width_s/2);
 		echo("base   ",base_line);
 		echo("center ",center_line);
+		echo("center1",center1);
+		echo("center2",center2);
+		echo("arc1   ",arc_line1);
+		echo("arc2   ",arc_line2);
+		echo("points0",points[0] );
+		echo("points1",points[1] );
+		echo("points2",points[2] );
+		echo("p4     ",p4);
+		echo("p5     ",p5);
+		echo("p6_1   ",p6_1);
+		echo("p6_2   ",p6_2);
+		echo("p7     ",p7);
+		echo("p8_1   ",p8_1);
+		echo("p8_2   ",p8_2);
+		echo("dist1 7",distSqre( points[1], p7 ));
+		echo("dist1 5",distSqre( points[1], p5 ));
 	}
 	if( level > 0 ) {
 		if( distSqre( points[1], p7 ) < distSqre( points[1], p5 ) ) {
-			#tesalate(thickness_f, width_s, [p5,p6,points[2]], level-1);
-			tesalate(thickness_f, width_s, [p7,points[1],p8], level-1);
+			if( debug == true ) {
+				tesalate(thickness_f, width_s*shrink, [p5,points[2],p6_2], level-1,debug);
+			#	tesalate(thickness_f, width_s*shrink, [p7,p8_1,points[1]], level-1,debug);
+			} else {
+				tesalate(thickness_f, width_s*shrink, [p5,points[2],p6_2], level-1);
+				tesalate(thickness_f, width_s*shrink, [p7,p8_1,points[1]], level-1,true);
+			}
 		} else {
-			tesalate(thickness_f, width_s, [p7,points[2],p8], level-1);
-			tesalate(thickness_f, width_s, [p5,p6,points[1]], level-1);
+			if( debug == true ) {
+			#	tesalate(thickness_f, width_s*shrink, [p7,points[2],p8_2], level-1,debug);
+			#	tesalate(thickness_f, width_s*shrink, [p5,p6_1,points[1]], level-1,debug);
+			} else {
+				tesalate(thickness_f, width_s*shrink, [p7,points[2],p8_2], level-1);
+				tesalate(thickness_f, width_s*shrink, [p5,p6_1,points[1]], level-1);
+			}
 		}
 
 	} else {
 		linear_extrude(height=thickness_f+0.2) polygon(points);
 	}
 }
+
 function testline( a, b ) = (!not_PoM_inf(a) && b < 0 ) || (!not_PoM_inf(b) && a < 0 ) || (a > 0.0 && b > 0.0) || (a == 0.0 && b > 0.0);
 function seg_seg_intersection( r1p1, r1p2, r2p1, r2p1 ) = 0;
 
 function lineFromPointsX(p1,p2) = (p2[1]-p1[1])/(p2[0]-p1[0]);
-function lineFromPoints( p1, p2 ) = [lineFromPointsX(p1,p2), (p1[0]!=p2[0])?-lineFromPointsX(p1,p2)*p1[0]+p1[1]:p1[0]];
+//create a line from 2 points ie v[0] is m or slope, and v[1] is b or y intercept
+//  if v[0] is +/- inf, ie vertical line v[0] is the x-intercept
+function lineFromPoints( p1, p2 ) = (p1[0]!=p2[0])?[lineFromPointsX(p1,p2),-lineFromPointsX(p1,p2)*p1[0]+p1[1]]:[1/0,p1[0]];
 
+//check to see is the value is not +/- inf
 function not_PoM_inf(v) = (v!=1/0 && v!=-1/0);
+
 function line_intersectionX( l1,l2 ) = (l2[1]-l1[1])/(l1[0]-l2[0]);
+//find the x,y point of intersection of 2 lines int the [m,b] form, assumes there is one and only one
 function line_intersection( l1,l2 ) = (not_PoM_inf(l1[0]) && not_PoM_inf(l2[0]))?
 										[line_intersectionX( l1,l2 ), (l1[0] * line_intersectionX( l1,l2 )) + l1[1] ]:
 										(not_PoM_inf(l1[0])?[l2[1],l1[0]*l2[1]+l1[1]]:
@@ -146,9 +188,11 @@ function line_intersection( l1,l2 ) = (not_PoM_inf(l1[0]) && not_PoM_inf(l2[0]))
 function is_parrallel( l1,l2 ) = l1[0] == l2[0]?true:false;
 function line_midpoint( p1, p2 ) = [(p1[0]+p2[0])/2,(p1[1]+p2[1])/2];
 
-function shift_line(l, d) = [l[0], (not_PoM_inf(l[0])?( -l[0]*cos(atan(-1/l[0]))*d + sin(atan(-1/l[0]))*d ):d)+l[1] ];
+//translate a line d units perpendicular to the slope of the line l
+function shift_line(l, d) = l+[0, (not_PoM_inf(l[0])?( -cos(atan(-1/l[0]))*d + sin(atan(-1/l[0]))*d ):d) ];
 function perpendicularLineThrough( l, p ) = not_PoM_inf(l[0])?(l[0]==0?[1/0,p[0]]:[-1/l[0], p[0]/l[0]+p[1] ]):[0,p[1]];
-function midpointOfLineThrough( a,b, p ) = lineFromPoints( (a+b)/2, p );
+function midpoint( a,b ) = (a+b)/2;
+function midpointOfLineThrough( a,b, p ) = lineFromPoints( midpoint( a,b ), p );
 
 function distanceFromSegment( a,b, p ) = sqrt(distanceFromSegmentSquared( a,b,p ));
 function distanceFromSegmentSquared( a,b,p ) = (distSqre( a, b ) == 0.0 )?dist(a,p):
