@@ -25,7 +25,7 @@ module hole(x,y,rad,deep,fn=100) {
 	translate([x,y,-0.1]) cylinder(r=rad,h=deep,$fn=fn);
 }
 module through_hole(x,y,rad,deep,fn=100) {
-	translate([x,y,-deep/2-0.1]) cylinder(r=rad,h=deep,$fn=fn);
+	translate([x,y,-deep/2-0.1]) cylinder(r=rad,h=deep+0.2,$fn=fn);
 }
 
 module nut_trap_hole(radius,height,nut_depth,nut_thickness,nut_size,trap_size) {

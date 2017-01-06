@@ -90,15 +90,12 @@ module z_supprt_frame( length_f,height_f, thickness_s, thickness_f, width_s, wid
 			linear_extrude(height=thickness_f) polygon(frame_points);
 		}
 		translate([0,0,-0.1]) union() {
-			tesalate2(  thickness_f, width_s, frame_holes[0] );
-			tesalate2(  thickness_f, width_s, frame_holes[1] );
-		//#	linear_extrude(height=thickness_f+0.2) polygon(frame_holes[0]);
-		//	linear_extrude(height=thickness_f+0.2) polygon(frame_holes[1]);
+			tesalate_triangle(  thickness_f, width_s, frame_holes[0],frame_holes[0] );
+			tesalate_triangle(  thickness_f, width_s, frame_holes[1],frame_holes[1] );
 		}
 	}
 }
 
-shrink = 4/5;
 //This method takes the points shifts them by +/- width_s/2 perpendicular to the line segment of point0 
 //  and the midpoint between point1 and 2 once so many levels are generated down will render the points
 module tesalate( thickness_f, width_s, points, level = 0, debug = false ) {
@@ -166,14 +163,20 @@ module tesalate( thickness_f, width_s, points, level = 0, debug = false ) {
 	}
 }
 
-module tesalate2( thickness_f, width_s, points, level = 0, debug = true ) {
+module tesalate_triangle( thickness_f, width_s, points_noShift, points, level = 0, shrink = 0.74, debug = false ) {
+	use_width = level == 0 ? width_s : width_s * pow(shrink,level);
+	
+	baseSeg_noShift = lineSegFromPoints( points_noShift[1], points_noShift[2] );
+	mPoint_noShift = midpoint( points_noShift[2], points_noShift[1] );
+	centerSeg_noShift = lineSegFromPoints(mPoint_noShift,points_noShift[0]);
+
 	baseSeg = lineSegFromPoints( points[1], points[2] );
 	
 	mPoint = midpoint( points[2], points[1] );
 	centerSeg = lineSegFromPoints(mPoint,points[0]);
 	
-	cenSeg1 = shiftLineSeg( centerSeg, -width_s/2 );
-	cenSeg2 = shiftLineSeg( centerSeg,  width_s/2 );
+	cenSeg1 = shiftLineSeg( centerSeg_noShift, -use_width/2 );
+	cenSeg2 = shiftLineSeg( centerSeg_noShift,  use_width/2 );
 	arcSeg1 = lineSegFromPoints( points[0], points[1] );
 	arcSeg2 = lineSegFromPoints( points[0], points[2] );
 	
@@ -181,9 +184,18 @@ module tesalate2( thickness_f, width_s, points, level = 0, debug = true ) {
 	p5 = lineSegIntersection( cenSeg1, baseSeg );
 	p6_1 = lineSegIntersection( cenSeg1, arcSeg1 );
 	p6_2 = lineSegIntersection( cenSeg1, arcSeg2 );
+	
 	p7 = lineSegIntersection( cenSeg2, baseSeg );
 	p8_1 = lineSegIntersection( cenSeg2, arcSeg1 );
 	p8_2 = lineSegIntersection( cenSeg2, arcSeg2 );
+	
+	arcSeg1_noShift = lineSegFromPoints( points_noShift[0], points_noShift[1] );
+	arcSeg2_noShift = lineSegFromPoints( points_noShift[0], points_noShift[2] );
+	
+	p5_noS = lineSegIntersection( centerSeg_noShift, baseSeg_noShift );
+	p6_1_noS = lineSegIntersection( centerSeg_noShift, arcSeg1_noShift );
+	p6_2_noS = lineSegIntersection( centerSeg_noShift, arcSeg2_noShift );
+	
 	area = triangleArea( points );
 	if( debug == true ) {
 		echo(" !!!!!!!!!!!!!!!!!!!!!!!! ");
@@ -210,23 +222,17 @@ module tesalate2( thickness_f, width_s, points, level = 0, debug = true ) {
 		echo("dist1 7",distSqre( points[1], p7 ));
 		echo("dist1 5",distSqre( points[1], p5 ));
 	}
-	if( area > 20 ) { //level< 6){
+	if( area > 25 ) {//&& level < 6){
 		if( distSqre( points[1], p7 ) < distSqre( points[1], p5 ) ) {
-			tesalate2(thickness_f, width_s*shrink, [p5,points[2],p6_2], level+1);
-			tesalate2(thickness_f, width_s*shrink, [p7,p8_1,points[1]], level+1);
+			tesalate_triangle(thickness_f, width_s, [p5_noS,points_noShift[2],p6_2_noS], [p5,points[2],p6_2], level+1, shrink);
+			tesalate_triangle(thickness_f, width_s, [p5_noS,p6_1_noS,points_noShift[1]], [p7,p8_1,points[1]], level+1, shrink);
 		} else {
-			tesalate2(thickness_f, width_s*shrink, [p7,points[2],p8_2], level+1);
-			tesalate2(thickness_f, width_s*shrink, [p5,p6_1,points[1]], level+1);
+			tesalate_triangle(thickness_f, width_s, [p5_noS,points_noShift[2],p6_2_noS], [p7,points[2],p8_2], level+1, shrink);
+			tesalate_triangle(thickness_f, width_s, [p5_noS,p6_1_noS,points_noShift[1]], [p5,p6_1,points[1]], level+1, shrink);
 		}
 
 	} else {
-		//echo("RENDER@@@@@@@@@@@@@ ");
-		if( area > 22.8061 && area < 22.8062 ) 
-		{
-	#	linear_extrude(height=thickness_f+0.2) polygon(points);
-		} else {
 		linear_extrude(height=thickness_f+0.2) polygon(points);
-		}
 	}
 }
 

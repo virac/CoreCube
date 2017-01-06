@@ -22,7 +22,7 @@ for( i = [0,1] )  {
 	}
 }
 
-module corner_motor_bracket( offset ) {
+module corner_motor_bracket( offset=0 ) {
 	union() {
 		non_braced_4_hole_L_bracket(frame_width,bracket_length, bracket_thickness);
 
@@ -104,7 +104,7 @@ module motor_shaft_brace() {
 			}
 			union() {
 				translate([-10,-17.5,19])  cube([15,18,5]);
-				translate([-5,-.5,19])  rotate([0,0,90]) cube([15,18,6]);
+				translate([-5,-.5,18.9])  rotate([0,0,90]) cube([15,18,6]);
 				translate([-10,-24.5,19]) rotate([0,0,45])  cube([5,25,5]);
 				translate([-23,-9.5,19]) rotate([-45,0,0]) translate([0,-5,0]) cube([5,28,15]);
 			}
@@ -118,7 +118,7 @@ module motor_shaft_brace() {
 			}
 			union() {
 				translate([-10,-17.5,19])  cube([15,18,5]);
-				translate([-5,-.5,19])  rotate([0,0,90]) cube([15,18,6]);
+				translate([-5,-.5,18.9])  rotate([0,0,90]) cube([15,18,6]);
 				translate([-10,-24.5,19]) rotate([0,0,45])  cube([5,25,5]);
 				translate([-23,-9.5,19]) rotate([-45,0,0]) translate([0,-5,0]) cube([5,28,15]);
 			}
