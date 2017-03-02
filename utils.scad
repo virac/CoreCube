@@ -4,6 +4,39 @@ include <bolts.scad>
 
 function toMMfromIN( in ) = in / 0.039370;
 
+module cube_top_bevel(s,sph_r) {
+	intersection(){
+		cube(s,center = true);
+		translate([0,0,sph_r])
+			minkowski(){
+				cube(s-[2*sph_r,2*sph_r,0],center=true);
+				sphere(r=sph_r,center=true,$fn=64);
+				
+			}
+	}
+}
+
+module cylinder_top_bevel( cyl_r, cyl_h, sph_r ) {
+	intersection(){
+		cylinder(r=cyl_r,h=cyl_h, $fn = 64);
+		minkowski(){
+			cylinder(r=cyl_r-sph_r,h=cyl_h-sph_r,$fn = 64);
+			sphere(r=sph_r,center=true,$fn=64);
+		}
+	}
+}
+
+module cylinder_bot_bevel( cyl_r, cyl_h, sph_r ) {
+	intersection(){
+		cylinder(r=cyl_r,h=cyl_h, $fn = 64);
+		translate([0,0,sph_r])
+			minkowski(){
+				cylinder(r=cyl_r-sph_r,h=cyl_h-sph_r,$fn = 64);
+				sphere(r=sph_r,center=true,$fn=64);
+			}
+	}
+}
+
 module box(w,h,d) {
 	scale ([w,h,d]) cube(1, true);
 }
